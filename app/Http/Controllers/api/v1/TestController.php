@@ -12,13 +12,11 @@ class TestController extends BaseController
 {
     protected $test;
 
-
     public function __construct(TestRepository $test)
     {
         $this->test = $test;
 
     }
-
 
     public function test()
     {
