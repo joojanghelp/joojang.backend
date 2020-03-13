@@ -17,7 +17,7 @@ class ApiBeforeMiddleware
     {
         $clientType = $request->header('request-client-type');
 
-	    if(empty($clientType) || !($clientType == "A02001" || $clientType == "A02002" || $clientType == "A02003"))
+	    if(empty($clientType) || !($clientType == "A01001" || $clientType == "A01002" || $clientType == "A01003"))
 	    {
 		    throw new \App\Exceptions\CustomException(__('auth.client_failed'));
         }

@@ -64,7 +64,7 @@ class Handler extends ExceptionHandler
 	    else if ($exception instanceof \App\Exceptions\CustomException) // 기타 Exception
 	    {
 		    return $exception->render($request, $exception);
-	    }
+        }
 
 	    if ($this->isHttpException($exception)) {  // 일 반 웹 요청 일떄.
 

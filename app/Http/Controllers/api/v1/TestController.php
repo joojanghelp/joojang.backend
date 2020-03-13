@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\api\v1\BaseController;
 
-use App\Repositories\TestRepository;
+use App\Repositories\v1\TestRepository;
 
 class TestController extends BaseController
 {
