@@ -27,7 +27,7 @@ class CodeMasterSeeder extends Seeder
 		    $group_id = trim($element['group_id']);
 		    $group_name = trim($element['group_name']);
 
-		    DB::table('tbl_common_code_master')->insert([
+		    DB::table('tbl_codes_master')->insert([
 			    'group_id' => $group_id,
 			    'group_name' => $group_name,
 			    'created_at' => \Carbon\Carbon::now(),
@@ -41,7 +41,7 @@ class CodeMasterSeeder extends Seeder
 
 		        $endCodeid = $group_id.$code_id;
 
-			    DB::table('tbl_common_code_master')->insert([
+			    DB::table('tbl_codes_master')->insert([
 				    'group_id' => $group_id,
 				    'group_name' => NULL,
 				    'code_id' => $endCodeid,
@@ -90,7 +90,7 @@ class CodeMasterSeeder extends Seeder
 				],
 			'A10' =>
 				[
-					[ 'code_id' => '000', 'code_name' => '가입대기' ],
+					[ 'code_id' => '000', 'code_name' => '대기' ],
 					[ 'code_id' => '010', 'code_name' => '이메일 인증 완료(정상)' ],
 				],
 			'A20' =>
