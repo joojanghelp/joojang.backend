@@ -16,3 +16,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::group(['namespace' => 'web', 'prefix' => 'web', 'as' => 'web.'], function () {
+	Route::group(['namespace' => 'v1', 'prefix' => 'v1', 'as' => 'v1.'], function () {
+        Route::get('test', 'AuthController@test')->name('test');
+
+        Route::group(['prefix' => 'auth','as' => 'auth.'], function () {
+            Route::get('email_auth', 'AuthController@email_auth')->name('email_auth');
+
+        });
+
+	});
+});

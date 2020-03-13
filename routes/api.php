@@ -20,5 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 	Route::group(['namespace' => 'v1', 'prefix' => 'v1', 'as' => 'v1.'], function () {
         Route::get('test', 'TestController@test')->name('test');
+
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('register', 'AuthController@register')->name('register');
 	});
 });
