@@ -50,7 +50,7 @@ class AuthRepository implements AuthRepositoryInterface
         $emailObject->receiverName = $request->input('name');
         $emailObject->receiver = $request->input('email');
         $emailObject->auth_code = $auth_code;
-        $emailObject->auth_url = url('/front/v1/auth/email_auth?code='.$auth_code);
+        $emailObject->auth_url = url('/web/v1/auth/email_auth?code='.$auth_code);
 
         Mail::to($request->input('email'))->send(new EmailMaster($emailObject));
 
