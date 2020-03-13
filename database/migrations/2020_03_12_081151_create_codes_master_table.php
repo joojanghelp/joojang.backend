@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCommonCodeMasterTable extends Migration
+class CreateCodesMasterTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCommonCodeMasterTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_common_code_master', function (Blueprint $table) {
+        Schema::create('tbl_codes_master', function (Blueprint $table) {
             $table->id();
             $table->char('group_id', 6);
             $table->char('code_id', 6)->nullable()->unique();
@@ -31,6 +31,6 @@ class CreateCommonCodeMasterTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_common_code_master');
+        Schema::dropIfExists('tbl_codes_master');
     }
 }
