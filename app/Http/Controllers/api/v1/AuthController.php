@@ -36,7 +36,19 @@ class AuthController extends BaseController
     {
         $result = $this->auth->attemptRegister($request);
 
-        print_r($result);
+        if($result['state'])
+		{
+			return $this->defaultSuccessResponse([
+				'message' => __('messages.success.registed'),
+				'info' => $result['data']
+			]);
+		}
+		else
+		{
+			return $this->defaultErrorResponse([
+				'message' => $result['message']
+			]);
+		}
     }
 
 
