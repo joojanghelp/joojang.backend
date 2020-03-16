@@ -21,7 +21,13 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 	Route::group(['namespace' => 'v1', 'prefix' => 'v1', 'as' => 'v1.'], function () {
         Route::get('test', 'TestController@test')->name('test');
 
-        Route::post('login', 'AuthController@login')->name('login');
-        Route::post('register', 'AuthController@register')->name('register');
+        Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+            Route::post('login', 'AuthController@login')->name('login');
+            Route::group(['middleware' => 'auth:api'], function () {
+                Route::post('refresh_token', 'AuthController@refresh_token')->name('refresh_token');
+            });
+            Route::post('register', 'AuthController@register')->name('register');
+
+        });
 	});
 });
