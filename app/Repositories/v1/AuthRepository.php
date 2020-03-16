@@ -135,4 +135,24 @@ class AuthRepository implements AuthRepositoryInterface
             'data' => $returnData
         ];
     }
+
+    public function attemptTokenRefresh($request) : array
+    {
+        // echo $request;
+        $UserData = Auth::user();
+
+        if (!$UserData) {
+            return [
+				'state' => false,
+				'message' => __('auth.failed')
+			];
+        }
+
+        $taskResult = self::getRefreshTokenTrait($request->input('refresh_token'));
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+    }
 }

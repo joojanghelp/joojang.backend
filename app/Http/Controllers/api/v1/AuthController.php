@@ -14,9 +14,7 @@ class AuthController extends BaseController
 
     public function __construct(AuthRepository $auth)
     {
-
         $this->auth = $auth;
-
     }
 
     /**
@@ -29,14 +27,11 @@ class AuthController extends BaseController
 
         $result = $this->auth->attemptLogin($request);
 
-        if($result['state'])
-		{
+        if($result['state']) {
 			return $this->firstSuccessResponse([
 				'data' => $result['data']
 			]);
-		}
-		else
-		{
+		} else {
 			return $this->defaultErrorResponse([
 				'message' => $result['message']
 			]);
@@ -61,6 +56,27 @@ class AuthController extends BaseController
 		{
 			return $this->defaultErrorResponse([
 				'message' => $result['message']
+			]);
+		}
+    }
+
+    /**
+     * 사용자 토큰 리프레쉬
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function refresh_token(Request $request)
+    {
+        $taskResult = $this->auth->attemptTokenRefresh($request);
+
+        if($taskResult['state']) {
+			return $this->firstSuccessResponse([
+				'data' => $taskResult['data']
+			]);
+		} else {
+			return $this->defaultErrorResponse([
+				'message' => $taskResult['message']
 			]);
 		}
     }
