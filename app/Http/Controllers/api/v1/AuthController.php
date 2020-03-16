@@ -26,7 +26,21 @@ class AuthController extends BaseController
      * @return void
      */
     public function login(Request $request) {
-        echo ":: login ::";
+
+        $result = $this->auth->attemptLogin($request);
+
+        if($result['state'])
+		{
+			return $this->firstSuccessResponse([
+				'data' => $result['data']
+			]);
+		}
+		else
+		{
+			return $this->defaultErrorResponse([
+				'message' => $result['message']
+			]);
+		}
     }
 
     /**

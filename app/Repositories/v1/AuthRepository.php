@@ -11,15 +11,19 @@ use App\Model\EmailAuth;
 use App\Helpers\MasterHelper;
 use App\Mail\EmailMaster;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route as FacadesRoute;
+
+use App\Traits\PassportTrait;
+
 class AuthRepository implements AuthRepositoryInterface
 {
-    public function start() {
-        echo "start";
+    use PassportTrait {
+        PassportTrait::getNewToken as getNewTokenTrait;
     }
 
-    public function test()
-    {
-        echo "::test::";
+    public function start() {
+
     }
 
     public function attemptRegister($request)
@@ -83,9 +87,52 @@ class AuthRepository implements AuthRepositoryInterface
                 ]
             ];
         }
+    }
 
+    public function attemptLogin($request)
+    {
+        if(!Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
+            return [
+				'state' => false,
+				'message' => __('auth.failed')
+			];
+        }
 
+        $user = Auth::user();
 
+        $tokenResult = $this->getNewTokenTrait($request->input('email'), $request->input('password'));
 
+        $user_name = $user['name'];
+        $user_state = $user['state'];
+        $user_active = $user['active'];
+
+        if($user_active != 'Y') // 사용자 상태 체크
+        {
+            return [
+                'state' => false,
+                'message' => __('auth.login.not_active_user')
+            ];
+        }
+
+        if($user_state == 'A10000') // 사용자 대기 체크
+        {
+            return [
+                'state' => false,
+                'message' => __('auth.login.wait_user')
+            ];
+        }
+
+        $returnData = [
+            'token_type' => $tokenResult['token_type'],
+            'expires_in' => $tokenResult['expires_in'],
+            'access_token' => $tokenResult['access_token'],
+            'refresh_token' => $tokenResult['refresh_token'],
+            'user_name' => $user_name
+        ];
+
+        return [
+            'state' => true,
+            'data' => $returnData
+        ];
     }
 }

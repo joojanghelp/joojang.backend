@@ -27,7 +27,10 @@ trait EmailAuthTrait
 
             if(EmailAuth::where('user_uuid', $user_uuid)->update(['verified_at' => $time]))
             {
-                User::where('uuid', $user_uuid)->update(['email_verified_at' => $time]);
+                User::where('uuid', $user_uuid)->update([
+                    'email_verified_at' => $time,
+                    'state' => 'A10010'
+                ]);
 
                 return [
                     'state' => true
