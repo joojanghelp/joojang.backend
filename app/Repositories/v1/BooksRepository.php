@@ -98,8 +98,7 @@ class BooksRepository implements BooksRepositoryInterface
             $uuid = $element['books']['uuid'];
 
             $returnData[] = [
-                'list_id' => $element['id'],
-                'books' => [
+                    'list_id' => $element['id'],
                     'id' => $element['books']['id'],
                     'uuid' => $element['books']['uuid'],
                     'title' => $element['books']['title'],
@@ -108,7 +107,6 @@ class BooksRepository implements BooksRepositoryInterface
                     'isbn' => $element['books']['isbn'],
                     'publisher' => $element['books']['publisher'],
                     'thumbnail' => $element['books']['thumbnail'],
-                ]
             ];
         endforeach;
 
