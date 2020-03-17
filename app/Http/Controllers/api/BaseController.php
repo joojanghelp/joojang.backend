@@ -12,28 +12,24 @@ class BaseController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function defaultSuccessResponse(array $params)
+	public function defaultSuccessCreateResponse()
 	{
-		$response = [
-			'message' => (isset($params['message']) && $params['message']) ? $params['message'] : __('messages.default.success')
-		];
-
-
-		if(isset($params['data']) && $params['data'])
-		{
-			$response['data'] = $params['data'];
-		}
-
-		if(isset($params['info']) && $params['info'])
-		{
-			$response['info'] = $params['info'];
-		}
-
-		$code = (isset($params['code']) && $params['code']) ? $params['code'] : 200;
-
-		return response()->json($response, $code);
+		return response()->json([
+            'messgae' => __('messages.default.do_success')
+        ], 201);
 	}
 
+    /**
+	 * 기본 성공 응답
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function defaultCreateFailResponse(string $message)
+	{
+		return response()->json([
+            'messgae' => $message
+        ], 400);
+	}
     /**
      * 기본 성공 응답 ( 바디만 처리 )
      *

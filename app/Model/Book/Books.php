@@ -34,4 +34,9 @@ class Books extends BaseModel
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    public function users_book()
+    {
+        return $this->hasOne('App\Model\Book\UsersBooks', 'id', 'book_id');
+    }
 }
