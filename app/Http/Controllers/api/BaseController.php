@@ -102,7 +102,9 @@ class BaseController extends Controller
      */
     public function defaultListSuccessResponse(array $params)
     {
-        return response()->json($params, 200);
+        return response()->json([
+            'items' => $params
+        ], 200);
     }
 
     /**
