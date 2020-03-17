@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Log;
 
 class ApiBeforeMiddleware
 {
@@ -21,6 +22,15 @@ class ApiBeforeMiddleware
 	    {
 		    throw new \App\Exceptions\CustomException(__('auth.client_failed'));
         }
+
+        $logid = date('Ymdhis');
+        $logHeaderInfo = json_encode($request->header());
+        $logBodyInfo = json_encode($request->all());
+
+        $logMessage = "ID:${logid} Header: {$logHeaderInfo} Body: ${logBodyInfo}";
+        Log::channel('requestlog')->error($logMessage);
+
+
 
         return $next($request);
     }
