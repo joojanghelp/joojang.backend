@@ -61,8 +61,13 @@ class Handler extends ExceptionHandler
 			Log::channel('pdoexceptionlog')->error($logMessage);
 
 	    }
-	    else if ($exception instanceof \App\Exceptions\CustomException) // 기타 Exception
+
+        if ($exception instanceof \App\Exceptions\CustomException) // 기타 Exception
 	    {
+            $logHeaderInfo = json_encode($request->header());
+            $logMessage = "ID:{$logid} Header: {$logHeaderInfo} Code:{$exception->getCode()} Message:{$exception->getMessage()} File:{$exception->getFile()} Line:{$exception->getLine()}";
+            Log::channel('customexceptionlog')->error($logMessage);
+
 		    return $exception->render($request, $exception);
         }
 

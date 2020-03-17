@@ -96,6 +96,29 @@ return [
             'handler' => NullHandler::class,
         ],
 
+        // TODO : Custom Channel Log
+	    'pdoexceptionlog' => [
+		    'driver' => 'daily',
+		    'path' => storage_path('logs/'.date('Y/m/').'pdoexceptionlog.log'),
+		    'level' => 'debug',
+		    'days' => 31,
+        ],
+
+        'customexceptionlog' => [
+		    'driver' => 'daily',
+		    'path' => storage_path('logs/'.date('Y/m/').'customexceptionlog.log'),
+		    'level' => 'debug',
+		    'days' => 31,
+        ],
+
+        'requestlog' => [
+		    'driver' => 'daily',
+		    'path' => storage_path('logs/'.date('Y/m/').'requestlog.log'),
+		    'level' => 'debug',
+		    'days' => 31,
+        ],
+
+
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],

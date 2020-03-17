@@ -20,8 +20,8 @@ composer install
 ```bash
 cp .env.example .env
 sh init.sh
-
 ```
+
 
 
 ## 기타 설정.
