@@ -23,8 +23,6 @@ trait EmailAuthTrait
             $time = \Carbon\Carbon::now();
             $user_uuid = $taskResult['user_uuid'];
 
-            // var_dump(User::where('uuid', $user_uuid)->update(['email_verified_at' => $time]));
-
             if(EmailAuth::where('user_uuid', $user_uuid)->update(['verified_at' => $time]))
             {
                 User::where('uuid', $user_uuid)->update([
@@ -36,20 +34,16 @@ trait EmailAuthTrait
                     'state' => true
                 ];
             }
-            else
-            {
-                return [
-                    'state' => false,
-                    'message' => __('message.default.error')
-                ];
-            }
-		}
-		else
-		{
-			return [
+
+            return [
                 'state' => false,
-                'message' =>  __('auth.email_auth.failed_auth_email_code')
-			];
+                'message' => __('message.default.error')
+            ];
 		}
+
+        return [
+            'state' => false,
+            'message' =>  __('auth.email_auth.failed_auth_email_code')
+        ];
     }
 }

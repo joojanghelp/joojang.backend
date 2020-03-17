@@ -26,6 +26,12 @@ class AuthRepository implements AuthRepositoryInterface
 
     }
 
+    /**
+     * 사용자 회원 가입.
+     *
+     * @param [type] $request
+     * @return void
+     */
     public function attemptRegister($request)
     {
         $validator = FacadesValidator::make($request->all(), [
@@ -89,6 +95,12 @@ class AuthRepository implements AuthRepositoryInterface
         }
     }
 
+    /**
+     * 사용자 로그인.
+     *
+     * @param [type] $request
+     * @return void
+     */
     public function attemptLogin($request)
     {
         if(!Auth::attempt(['email' => $request->input('email'), 'password' => $request->input('password')])) {
@@ -136,6 +148,12 @@ class AuthRepository implements AuthRepositoryInterface
         ];
     }
 
+    /**
+     * 사용자 토큰 리프레쉬.
+     *
+     * @param [type] $request
+     * @return array
+     */
     public function attemptTokenRefresh($request) : array
     {
         // echo $request;

@@ -29,5 +29,12 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::post('register', 'AuthController@register')->name('register');
 
         });
+
+        Route::group(['middleware' => 'auth:api', 'namespace' => 'user', 'prefix' => 'user', 'as' => 'user.'], function () {
+            Route::post('books', 'BooksController@create')->name('create');
+            Route::get('books', 'BooksController@index')->name('index');
+            Route::put('books', 'BooksController@update')->name('update');
+            Route::delete('books', 'BooksController@delete')->name('delete');
+        });
 	});
 });
