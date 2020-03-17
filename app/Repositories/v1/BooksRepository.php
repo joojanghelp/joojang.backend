@@ -12,7 +12,12 @@ use App\Traits\Model\BooksTrait;
 
 class BooksRepository implements BooksRepositoryInterface
 {
-    use BooksTrait ;
+    use BooksTrait {
+        BooksTrait::createBooks as createBooksTrait;
+        BooksTrait::userBooksExits as userBooksExitsTrait;
+        BooksTrait::createUserBooks as createUserBooksTrait;
+        BooksTrait::getUserBooks as getUserBooksTrait;
+    }
 
     public function start()
     {
@@ -51,8 +56,43 @@ class BooksRepository implements BooksRepositoryInterface
         }
 
         $Userid = $User->id;
+        $book_id = $this->createBooksTrait($request->all());
+
+        if(!$book_id) {
+            throw new \App\Exceptions\CustomException(__('message.default.error'));
+        }
+
+        $checkBook = $this->userBooksExitsTrait($Userid, $book_id);
+
+        if($checkBook) {
+            return [
+				'state' => false,
+				'message' => __('messages.error.exits')
+			];
+        }
+
+        $create = $this->createUserBooksTrait($Userid, $book_id);
+
+        if(!$create) {
+            throw new \App\Exceptions\CustomException(__('message.default.error'));
+        }
+
+        return [
+            'state' => true
+        ];
+    }
+
+    public function getBooksList()
+    {
+        $User = Auth::user();
+
+        $Userid = $User->id;
+
+        $task = $this->getUserBooksTrait($User->id);
+
+        print_r($task);
 
 
-        return [];
+
     }
 }

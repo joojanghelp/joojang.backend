@@ -22,12 +22,22 @@ class BooksController extends BaseController
     {
         $task = $this->books->attemptCreate($request);
 
-        return $task;
+        if($task['state']) {
+            return BaseController::defaultSuccessCreateResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
+        }
     }
 
     public function index()
     {
-        return __FUNCTION__;
+        $task = $this->books->getBooksList();
+
+        if($task['state']) {
+            return BaseController::defaultSuccessCreateResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
+        }
     }
 
     public function update()
