@@ -8,6 +8,16 @@ use Illuminate\Http\Request;
 class BaseController extends Controller
 {
     /**
+     * 기본 성공 응답 ( 바디만 처리 )
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function firstSuccessResponse(array $params)
+    {
+        return response()->json($params['data'], 200);
+    }
+
+    /**
 	 * 기본 성공 응답 (생성)
 	 *
 	 * @return \Illuminate\Http\Response
