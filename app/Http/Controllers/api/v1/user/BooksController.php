@@ -32,11 +32,10 @@ class BooksController extends BaseController
     public function index()
     {
         $task = $this->books->getBooksList();
-
-        if($task['state']) {
-            return BaseController::defaultSuccessCreateResponse();
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
         } else {
-            return BaseController::defaultCreateFailResponse($task['message']);
+            return BaseController::defaultListSuccessResponse($task['data']);
         }
     }
 

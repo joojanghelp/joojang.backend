@@ -84,15 +84,44 @@ class BooksRepository implements BooksRepositoryInterface
 
     public function getBooksList()
     {
+        $returnData = [];
+
         $User = Auth::user();
 
         $Userid = $User->id;
 
         $task = $this->getUserBooksTrait($User->id);
 
-        print_r($task);
+        foreach($task as $element):
+            $user_books_number = $element['id'];
+            $book_id = $element['books']['id'];
+            $uuid = $element['books']['uuid'];
 
+            $returnData[] = [
+                'list_id' => $element['id'],
+                'books' => [
+                    'id' => $element['books']['id'],
+                    'uuid' => $element['books']['uuid'],
+                    'title' => $element['books']['title'],
+                    'authors' => $element['books']['authors'],
+                    'contents' => $element['books']['contents'],
+                    'isbn' => $element['books']['isbn'],
+                    'publisher' => $element['books']['publisher'],
+                    'thumbnail' => $element['books']['thumbnail'],
+                ]
+            ];
+        endforeach;
 
+        if(empty($returnData)) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
 
+        return [
+            'state' => true,
+            'data' => $returnData
+        ];
     }
 }
