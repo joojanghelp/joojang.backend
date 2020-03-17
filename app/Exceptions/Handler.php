@@ -2,9 +2,11 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -59,8 +61,14 @@ class Handler extends ExceptionHandler
 	    {
 			$logMessage = "ID:{$logid} Code:{$exception->getCode()} Message:{$exception->getMessage()} File:{$exception->getFile()} Line:{$exception->getLine()}";
 			Log::channel('pdoexceptionlog')->error($logMessage);
+        }
 
-	    }
+        //TODO:: 인증 에러 Exception
+        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            return response()->json([
+                'error_message' => __('auth.need_login'),
+            ], 401);
+        }
 
         if ($exception instanceof \App\Exceptions\CustomException) // 기타 Exception
 	    {
@@ -73,11 +81,11 @@ class Handler extends ExceptionHandler
 
 	    if ($this->isHttpException($exception)) {  // 일 반 웹 요청 일떄.
 
-		    if (view()->exists('errors.'.$exception->getStatusCode($exception)))
+		    if (view()->exists('errors.'.$exception->getCode($exception)))
 		    {
-			    return response()->view('errors.'.$exception->getStatusCode($exception), [
+			    return response()->view('errors.'.$exception->getCode($exception), [
 			    	'message' => config('app.debug') ? $exception->getMessage() : ''
-			    ], $exception->getStatusCode($exception));
+			    ], $exception->getCode($exception));
 		    }
 
 		    return response()->view('errors.500', [

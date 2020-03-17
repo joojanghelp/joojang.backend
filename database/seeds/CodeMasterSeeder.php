@@ -69,6 +69,7 @@ class CodeMasterSeeder extends Seeder
 		    [ 'group_id' => 'A10', 'group_name' => '사용자 상태' ],
 		    [ 'group_id' => 'A20', 'group_name' => '사용자 레벨' ],
             [ 'group_id' => 'A21', 'group_name' => '사용자 성별' ],
+            [ 'group_id' => 'B11', 'group_name' => '북 카테고리(학년)' ],
             [ 'group_id' => 'S01', 'group_name' => '시스템' ],
 	    ];
 
@@ -109,6 +110,19 @@ class CodeMasterSeeder extends Seeder
 				[
 					[ 'code_id' => '000', 'code_name' => '비사용' ],
 					[ 'code_id' => '001', 'code_name' => '사용' ],
+                ],
+            'B11' =>
+				[
+					[ 'code_id' => '000', 'code_name' => '없음' ],
+                    [ 'code_id' => '110', 'code_name' => '초등학교 1학년' ],
+                    [ 'code_id' => '120', 'code_name' => '초등학교 2학년' ],
+                    [ 'code_id' => '130', 'code_name' => '초등학교 3학년' ],
+                    [ 'code_id' => '140', 'code_name' => '초등학교 4학년' ],
+                    [ 'code_id' => '150', 'code_name' => '초등학교 5학년' ],
+                    [ 'code_id' => '160', 'code_name' => '초등학교 6학년' ],
+                    [ 'code_id' => '210', 'code_name' => '중학교' ],
+                    [ 'code_id' => '310', 'code_name' => '고등학교' ],
+                    [ 'code_id' => '410', 'code_name' => '대학교' ],
 				],
 		];
 
