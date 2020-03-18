@@ -31,10 +31,16 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
         });
 
         Route::group(['middleware' => 'auth:api', 'namespace' => 'user', 'prefix' => 'user', 'as' => 'user.'], function () {
-            Route::post('books', 'BooksController@create')->name('create');
-            Route::get('books', 'BooksController@index')->name('index');
-            Route::put('books', 'BooksController@update')->name('update');
-            Route::delete('books', 'BooksController@delete')->name('delete');
+            Route::post('books', 'BooksController@create')->name('books.create');
+            Route::get('books', 'BooksController@index')->name('books.index');
+            Route::put('books', 'BooksController@update')->name('books.update');
+            Route::delete('books', 'BooksController@delete')->name('books.delete');
+
+            Route::post('books/recommend/read', 'BooksController@recommend_read')->name('books.recommend.read');
+        });
+
+        Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
+            Route::get('recommend', 'BooksController@recommend')->name('recommend');
         });
 	});
 });
