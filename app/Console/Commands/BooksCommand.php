@@ -58,6 +58,9 @@ class BooksCommand extends Command
         $this->insertRecommend();
     }
 
+    /**
+     * 카테고리
+     */
     public function initCategory()
     {
         $init_code = [];
@@ -73,6 +76,11 @@ class BooksCommand extends Command
         $this->init_code = $init_code;
     }
 
+    /**
+     * 등록할 책
+     *
+     * @return void
+     */
     public function initBooks()
     {
         $task = Books::where('active', 'Y')->whereNotNull('contents')->get()->toArray();
@@ -83,6 +91,11 @@ class BooksCommand extends Command
         endforeach;
     }
 
+    /**
+     * 추천 도서 등록.
+     *
+     * @return void
+     */
     public function insertRecommend()
     {
         RecommendBooks::truncate();
