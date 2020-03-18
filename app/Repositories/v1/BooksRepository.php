@@ -148,7 +148,7 @@ class BooksRepository implements BooksRepositoryInterface
                 'list_id' => $element['id'],
                 'gubun' => $element['gubun'],
                 'gubun_name' => $element['gubun_name'],
-                'book_id' => $element['id'],
+                'book_id' => $element['book_id'],
                 'uuid' => $element['uuid'],
                 'title' => $element['title'],
                 'authors' => $element['authors'],
