@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBooksCategoryMaster extends Migration
+class CreateUserReadBooksList extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateBooksCategoryMaster extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_books_category_master', function (Blueprint $table) {
+        Schema::create('tbl_user_read_books_list', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->nullable()->comment('등록 사용자 아이디.');
             $table->unsignedBigInteger('book_id')->nullable()->comment('books_master id 값.');
-            $table->string('gubun')->nullable()->comment('books 카테고리 코드 값.');
             $table->enum('active', ['Y', 'N'])->default('Y')->comment('사용 유무.');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('book_id')->references('id')->on('tbl_books_master')->onDelete('cascade');
-            $table->foreign('gubun')->references('code_id')->on('tbl_codes_master')->onDelete('cascade');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateBooksCategoryMaster extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_books_category_master');
+        Schema::dropIfExists('tbl_user_read_books_list');
     }
 }

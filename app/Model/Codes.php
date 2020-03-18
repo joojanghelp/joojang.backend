@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Model\Book;
+namespace App\Model;
 
 use App\Model\BaseModel;
 
-class BooksCategory extends BaseModel
+class Codes extends BaseModel
 {
-    protected $table = "tbl_books_category_master";
+    protected $table = "tbl_codes_master";
 
     /**
      * The attributes that are mass assignable.
@@ -14,7 +14,7 @@ class BooksCategory extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'book_id', 'gubun', 'active'
+        'group_id', 'code_id', 'group_name', 'code_name'
     ];
 
     /**

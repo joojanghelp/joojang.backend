@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Support\Facades\Log;
@@ -56,20 +57,23 @@ class Handler extends ExceptionHandler
         // return parent::render($request, $exception);
         $logid = date('Ymdhis'); // 로그 고유값.
 
-    	//TODO: Exception Control
+    	// mysql 에러
 	    if ($exception instanceof \PDOException)  // mysql Exception 따로 기록.
 	    {
 			$logMessage = "ID:{$logid} Code:{$exception->getCode()} Message:{$exception->getMessage()} File:{$exception->getFile()} Line:{$exception->getLine()}";
 			Log::channel('pdoexceptionlog')->error($logMessage);
         }
 
-        //TODO:: 인증 에러 Exception
+        // 인증 에러.
         if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
             return response()->json([
                 'error_message' => __('auth.need_login'),
             ], 401);
         }
 
+        /**
+         * 기타.
+         */
         if ($exception instanceof \App\Exceptions\CustomException) // 기타 Exception
 	    {
             $logHeaderInfo = json_encode($request->header());
@@ -79,22 +83,23 @@ class Handler extends ExceptionHandler
 		    return $exception->render($request, $exception);
         }
 
-	    if ($this->isHttpException($exception)) {  // 일 반 웹 요청 일떄.
-
-		    if (view()->exists('errors.'.$exception->getCode($exception)))
-		    {
-			    return response()->view('errors.'.$exception->getCode($exception), [
-			    	'message' => config('app.debug') ? $exception->getMessage() : ''
-			    ], $exception->getCode($exception));
-		    }
-
-		    return response()->view('errors.500', [
-			    'message' => config('app.debug') ? $exception->getMessage() : ''
-		    ], 500);
-	    }
-	    else
+        /**
+         * 페이지 없는 요청 일떄.
+         */
+        if ($request->wantsJson() && $exception instanceof NotFoundHttpException)
 	    {
-	    	// ajax 요청 일떄.
+            $logHeaderInfo = json_encode($request->header());
+            $logMessage = "ID:{$logid} Header: {$logHeaderInfo} Code:{$exception->getCode()} Message:{$exception->getMessage()} File:{$exception->getFile()} Line:{$exception->getLine()}";
+            Log::channel('customexceptionlog')->error($logMessage);
+
+		    return response()->json([
+                'error_message' => '알수 없는 요청 입니다.',
+            ], 404);
+        }
+
+        // ajax 요청 일떄.
+        if($request->wantsJson()) {
+
 		    if(config('app.debug'))
 		    {
 			    return response()->json([
@@ -109,6 +114,21 @@ class Handler extends ExceptionHandler
 				    'error_message' => $exception->getMessage(),
 			    ], 500);
 		    }
+        }
+
+        // 일 반 웹 요청 일떄.
+	    if ($this->isHttpException($exception)) {
+
+		    if (view()->exists('errors.'.$exception->getCode()))
+		    {
+			    return response()->view('errors.'.$exception->getCode(), [
+			    	'message' => config('app.debug') ? $exception->getMessage() : ''
+			    ], $exception->getCode());
+		    }
+
+		    return response()->view('errors.500', [
+			    'message' => config('app.debug') ? $exception->getMessage() : ''
+		    ], 500);
 	    }
 
 	    return parent::render($request, $exception);

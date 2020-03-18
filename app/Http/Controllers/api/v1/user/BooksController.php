@@ -17,7 +17,12 @@ class BooksController extends BaseController
 
     }
 
-
+    /**
+     * 책 등록.
+     *
+     * @param Request $request
+     * @return void
+     */
     public function create(Request $request)
     {
         $task = $this->books->attemptCreate($request);
@@ -29,6 +34,11 @@ class BooksController extends BaseController
         }
     }
 
+    /**
+     * 자기가 등록한 책 리스트
+     *
+     * @return void
+     */
     public function index()
     {
         $task = $this->books->getBooksList();
@@ -36,6 +46,22 @@ class BooksController extends BaseController
             return BaseController::defaultListNothingResponse($task['message']);
         } else {
             return BaseController::defaultListSuccessResponse($task['data']);
+        }
+    }
+
+    /**
+     * 추천 목록에서 자기가 읽은 책 표시.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function recommend_read(Request $request) {
+        $task = $this->books->setRecommendRead($request);
+
+        if($task['state']) {
+            return BaseController::defaultSuccessCreateResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
         }
     }
 

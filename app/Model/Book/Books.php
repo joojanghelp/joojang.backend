@@ -35,8 +35,23 @@ class Books extends BaseModel
         // 'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * 관계 설정. 자기가 등록한 책
+     *
+     * @return void
+     */
     public function users_book()
     {
         return $this->hasOne('App\Model\Book\UsersBooks', 'id', 'book_id');
+    }
+
+    /**
+     * 관계 추천 도서.
+     *
+     * @return void
+     */
+    public function recommand_book()
+    {
+        return $this->hasOne('App\Model\Book\RecommendBooks', 'id', 'book_id');
     }
 }

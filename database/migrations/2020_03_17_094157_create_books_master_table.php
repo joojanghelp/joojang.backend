@@ -16,7 +16,7 @@ class CreateBooksMasterTable extends Migration
         Schema::create('tbl_books_master', function (Blueprint $table) {
 
             $table->id();
-            $table->unsignedBigInteger('uuid')->nullable()->comment('책 고유값.');
+            $table->string('uuid')->nullable()->comment('책 고유값.');
             $table->unsignedBigInteger('user_id')->nullable()->comment('등록 사용자 아이디.');
             $table->string('title')->nullable()->comment('title.');
             $table->string('authors')->nullable()->comment('authors.');
