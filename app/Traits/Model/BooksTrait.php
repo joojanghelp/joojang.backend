@@ -139,10 +139,11 @@ trait BooksTrait
      * @param string $user_id
      * @return void
      */
-    public function getRecommenBooksAddUserRead(string $user_id)
+    public function getRecommenBooksAddUserRead(string $user_id) : array
     {
         return DB::table('tbl_recommend_books_list_master')
         ->select(DB::raw("
+        tbl_recommend_books_list_master.id,
             tbl_recommend_books_list_master.book_id,
             tbl_recommend_books_list_master.gubun,
             tbl_codes_master.code_name as gubun_name,
@@ -155,7 +156,6 @@ trait BooksTrait
             tbl_books_master.thumbnail,
             IF(tbl_user_read_books_list.book_id, 1, 0) as read_check
         "))
-
         ->leftJoin('tbl_books_master', 'tbl_recommend_books_list_master.book_id', '=', 'tbl_books_master.id')
         ->leftJoin('tbl_user_read_books_list', function ($join) use ($user_id) {
             $join->on('tbl_recommend_books_list_master.book_id', '=', 'tbl_user_read_books_list.book_id')

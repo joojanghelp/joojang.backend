@@ -19,35 +19,12 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::getRecommendBooks as getRecommendBooksTrait;
         BooksTrait::createBooksRead as createBooksReadTrait;
         BooksTrait::checkBooksReads as checkBooksReadsTrait;
+        BooksTrait::getRecommenBooksAddUserRead as getRecommenBooksAddUserReadTrait;
     }
 
     public function start()
     {
         echo "::: BooksRepository start :::";
-    }
-
-    /**
-     * 추천 도서 목록 배열로 변환
-     *
-     * @return array
-     */
-    private function getRecommendBooks() : array
-    {
-        return array_map(function($element) {
-            return [
-                'list_id' => $element['id'],
-                'gubun' => $element['gubun']['code_id'],
-                'gubun_name' => $element['gubun']['code_name'],
-                'book_id' => $element['books']['id'],
-                'uuid' => $element['books']['uuid'],
-                'title' => $element['books']['title'],
-                'authors' => $element['books']['authors'],
-                'contents' => $element['books']['contents'],
-                'isbn' => $element['books']['isbn'],
-                'publisher' => $element['books']['publisher'],
-                'thumbnail' => $element['books']['thumbnail'],
-            ];
-        }, $this->getRecommendBooksTrait());
     }
 
     /**
@@ -165,7 +142,26 @@ class BooksRepository implements BooksRepositoryInterface
 
         $Userid = (isset($User->id) && $User->id) ? $User->id : 0;
 
-        $task = $this->getRecommenBooksAddUserRead($Userid);
+        $task = array_map(function($element) {
+
+            return [
+                'list_id' => $element['id'],
+                'gubun' => $element['gubun'],
+                'gubun_name' => $element['gubun_name'],
+                'book_id' => $element['book_id'],
+                'uuid' => $element['uuid'],
+                'title' => $element['title'],
+                'authors' => $element['authors'],
+                'contents' => $element['contents'],
+                'isbn' => $element['isbn'],
+                'publisher' => $element['publisher'],
+                'thumbnail' => $element['thumbnail'],
+                'read_check' => ($element['read_check'] == 1) ? true: false,
+            ];
+        }, json_decode(json_encode($this->getRecommenBooksAddUserReadTrait($Userid)), true));
+
+
+
         if(!$task) {
             return [
                 'state' => false,
