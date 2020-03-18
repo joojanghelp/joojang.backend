@@ -14,7 +14,7 @@ class RecommendBooks extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'user_id', 'book_id', 'active'
+        'user_id', 'book_id', 'active', 'gubun'
     ];
 
     /**
@@ -34,4 +34,24 @@ class RecommendBooks extends BaseModel
     protected $casts = [
         // 'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * 관계.. 책.
+     *
+     * @return void
+     */
+    public function books()
+    {
+        return $this->hasOne('App\Model\Book\Books', 'id', 'book_id');
+    }
+
+    /**
+     * 관계 구분 공통 코드.
+     *
+     * @return void
+     */
+    public function gubun()
+    {
+        return $this->hasOne('App\Model\Codes', 'code_id', 'gubun');
+    }
 }

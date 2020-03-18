@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Validator as FacadesValidator;
 
 use App\Traits\Model\BooksTrait;
 
-
 class BooksRepository implements BooksRepositoryInterface
 {
     use BooksTrait {
@@ -17,11 +16,38 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::userBooksExits as userBooksExitsTrait;
         BooksTrait::createUserBooks as createUserBooksTrait;
         BooksTrait::getUserBooks as getUserBooksTrait;
+        BooksTrait::getRecommendBooks as getRecommendBooksTrait;
+        BooksTrait::createBooksRead as createBooksReadTrait;
+        BooksTrait::checkBooksReads as checkBooksReadsTrait;
     }
 
     public function start()
     {
         echo "::: BooksRepository start :::";
+    }
+
+    /**
+     * 추천 도서 목록 배열로 변환
+     *
+     * @return array
+     */
+    private function getRecommendBooks() : array
+    {
+        return array_map(function($element) {
+            return [
+                'list_id' => $element['id'],
+                'gubun' => $element['gubun']['code_id'],
+                'gubun_name' => $element['gubun']['code_name'],
+                'book_id' => $element['books']['id'],
+                'uuid' => $element['books']['uuid'],
+                'title' => $element['books']['title'],
+                'authors' => $element['books']['authors'],
+                'contents' => $element['books']['contents'],
+                'isbn' => $element['books']['isbn'],
+                'publisher' => $element['books']['publisher'],
+                'thumbnail' => $element['books']['thumbnail'],
+            ];
+        }, $this->getRecommendBooksTrait());
     }
 
     /**
@@ -37,10 +63,10 @@ class BooksRepository implements BooksRepositoryInterface
         $validator = FacadesValidator::make($request->all(), [
 			'uuid' => 'required',
 			'authors' => 'required',
-			'contents' => 'required',
+			// 'contents' => 'required',
 			'isbn' => 'required',
 			'publisher' => 'required',
-			'thumbnail' => 'required',
+			// 'thumbnail' => 'required',
 			'title' => 'required',
         ]);
 
@@ -82,6 +108,11 @@ class BooksRepository implements BooksRepositoryInterface
         ];
     }
 
+    /**
+     * 사용자가 등록한 책 목록.
+     *
+     * @return void
+     */
     public function getBooksList()
     {
         $returnData = [];
@@ -120,6 +151,76 @@ class BooksRepository implements BooksRepositoryInterface
         return [
             'state' => true,
             'data' => $returnData
+        ];
+    }
+
+    /**
+     * 추천 도서 목록중 사용자가 읽은 책 표시.
+     *
+     * @return void
+     */
+    public function setRecommendBooks()
+    {
+        $User = Auth::user();
+
+        $Userid = (isset($User->id) && $User->id) ? $User->id : 0;
+
+        $task = $this->getRecommenBooksAddUserRead($Userid);
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+        return [
+            'state' => true,
+            'data' => $task
+        ];
+    }
+
+    /**
+     * 사용자가 읽은책 표시.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function setRecommendRead(Request $request)
+    {
+        $User = Auth::user();
+
+        $validator = FacadesValidator::make($request->all(), [
+			'book_id' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        if($this->checkBooksReadsTrait($User->id, $request->input('book_id'))) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.exits')
+            ];
+        }
+
+        $task = $this->createBooksReadTrait($User->id, $request->input('book_id'));
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+
+        return [
+            'state' => true
         ];
     }
 }
