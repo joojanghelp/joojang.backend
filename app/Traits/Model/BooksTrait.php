@@ -164,4 +164,21 @@ trait BooksTrait
         ->leftJoin('tbl_codes_master', 'tbl_recommend_books_list_master.gubun', '=', 'tbl_codes_master.code_id')
         ->get()->toArray();
     }
+
+    /**
+     * 책 상세 정보.
+     *
+     * @param integer $book_id
+     * @return void
+     */
+    public function getBookInfo(int $book_id)
+    {
+        $taskResult = Books::where('id', $book_id)->get();
+        if($taskResult->isNotEmpty()) {
+			$bookInfo = $taskResult->first();
+			return $bookInfo;
+        }
+
+        return false;
+    }
 }

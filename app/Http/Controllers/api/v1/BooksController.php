@@ -51,4 +51,25 @@ class BooksController extends BaseController
             return BaseController::defaultCreateFailResponse($task['message']);
         }
     }
+
+    /**
+     * 책 상세 정보.
+     *
+     * @param integer $book_id
+     * @return void
+     */
+    public function detail(int $book_id)
+    {
+        $task = $this->books->getBookInfo($book_id);
+
+        if($task['state']) {
+            return BaseController::secondSuccessResponse($task['data']);
+        } else {
+            return BaseController::defaultErrorResponse([
+                'message' => $task['message']
+            ]);
+        }
+
+
+    }
 }
