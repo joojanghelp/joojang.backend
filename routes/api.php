@@ -36,6 +36,10 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::put('books', 'BooksController@update')->name('books.update');
             Route::delete('books', 'BooksController@delete')->name('books.delete');
 
+            Route::get('setting', 'UserController@get_setting')->name('setting'); // 사용자 설정 페이지.
+
+            Route::post('books/activity', 'BooksController@create_activity')->name('activity.create');
+
             Route::post('books/recommend/read', 'BooksController@recommend_read')->name('books.recommend.read');
         });
 

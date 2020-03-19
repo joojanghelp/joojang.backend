@@ -14,7 +14,6 @@ class BooksController extends BaseController
     public function __construct(BooksRepository $books)
     {
         $this->books = $books;
-
     }
 
     /**
@@ -73,5 +72,16 @@ class BooksController extends BaseController
     public function delete()
     {
         return __FUNCTION__;
+    }
+
+    public function create_activity(Request $request)
+    {
+        $task = $this->books->attemptCreateActivity($request);
+
+        if($task['state']) {
+            return BaseController::defaultSuccessCreateResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
+        }
     }
 }

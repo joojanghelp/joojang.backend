@@ -1,18 +1,47 @@
 <?php
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+namespace App\Console\Commands;
 
-class CodeMasterSeeder extends Seeder
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
+use App\Model\Codes;
+
+class CodesCommand extends Command
 {
     /**
-     * Run the database seeds.
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'codes:reset';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = '공통 코드 커맨드';
+
+    /**
+     * Create a new command instance.
      *
      * @return void
      */
-    public function run()
+    public function __construct()
     {
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
         $this->init();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1');
     }
 
     /**
@@ -20,6 +49,10 @@ class CodeMasterSeeder extends Seeder
      */
     public function init()
     {
+
+        Codes::truncate();
+
+
         $arrayGroupCodesList = $this->initGroupCodesList();
 	    $arrayCodesList = $this->initCodesList();
 
