@@ -1,12 +1,15 @@
 <?php
 namespace App\Traits\Model;
 
+use Illuminate\Support\Facades\DB;
+
 use App\User;
+
 use App\Model\Book\UsersBooks;
 use App\Model\Book\Books;
 use App\Model\Book\RecommendBooks;
 use App\Model\Book\UserReadBooks;
-use Illuminate\Support\Facades\DB;
+use App\Model\Book\UserBookActivity;
 
 trait BooksTrait
 {
@@ -180,5 +183,25 @@ trait BooksTrait
         }
 
         return false;
+    }
+
+    public function createUserBookActivity(array $params)
+    {
+        $task = UserBookActivity::create([
+            'book_id' => $params['book_id'],
+            'user_id' => $params['user_id'],
+            'uid' => $params['uid'],
+            'gubun' => $params['gubun'],
+            'contents' => $params['contents'],
+        ]);
+        if(!$task) {
+			return false;
+		}
+        return $task->id;
+    }
+
+    public function getUserBookActivity(int $book_id)
+    {
+        return UserBookActivity::with(['user', 'gubun'])->where('book_id', $book_id)->get()->toArray();
     }
 }

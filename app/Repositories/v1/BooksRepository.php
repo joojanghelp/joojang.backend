@@ -6,7 +6,7 @@ use App\Repositories\v1\BooksRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
-
+use App\Helpers\MasterHelper;
 use App\Traits\Model\BooksTrait;
 
 class BooksRepository implements BooksRepositoryInterface
@@ -21,6 +21,8 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::checkBooksReads as checkBooksReadsTrait;
         BooksTrait::getRecommenBooksAddUserRead as getRecommenBooksAddUserReadTrait;
         BooksTrait::getBookInfo as getBookInfoTrait;
+        BooksTrait::createUserBookActivity as createUserBookActivityTrait;
+        BooksTrait::getUserBookActivity as getUserBookActivityTrait;
     }
 
     public function start()
@@ -227,7 +229,6 @@ class BooksRepository implements BooksRepositoryInterface
      */
     public function getBookInfo(int $book_id) : array
     {
-
         $task = $this->getBookInfoTrait($book_id);
 
         if(!$task) {
@@ -236,6 +237,20 @@ class BooksRepository implements BooksRepositoryInterface
                 'message' => __('messages.error.nothing')
             ];
         }
+
+        $activityTask = $this->getUserBookActivityTrait($book_id);
+
+        $activitys = array_map(function($element) {
+            return [
+                'activity_id' => $element['id'],
+                'user_id' => $element['user_id'],
+                'user_name' => $element['user']['name'],
+                'uid' => $element['uid'],
+                'gubun' => $element['gubun']['code_id'],
+                'gubun_name' => $element['gubun']['code_name'],
+                'contents' => $element['contents'],
+            ];
+        }, $this->getUserBookActivityTrait($book_id));
 
         return [
             'state' => true,
@@ -249,8 +264,56 @@ class BooksRepository implements BooksRepositoryInterface
                 'isbn' => $task->isbn,
                 'publisher' => $task->publisher,
                 'thumbnail' => $task->thumbnail,
-                'book_report' => []
+                'book_activity' => $activitys
             ]
+        ];
+    }
+
+    /**
+     * 독서 활동 쓰기.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function attemptCreateActivity(Request $request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'book_id' => 'required',
+            'gubun' => 'required',
+            'contents' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $createObject = [
+            'book_id' => $request->input('book_id'),
+            'user_id' => Auth::id(),
+            'uid' => MasterHelper::GenerateUUID(),
+            'gubun' => $request->input('gubun'),
+            'contents' => $request->input('contents'),
+        ];
+
+        $task = $this->createUserBookActivityTrait($createObject);
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+
+        return [
+            'state' => true,
+            'message' => __('messages.default.do_success')
         ];
     }
 }
