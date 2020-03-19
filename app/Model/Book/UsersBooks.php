@@ -37,6 +37,6 @@ class UsersBooks extends BaseModel
 
     public function books()
     {
-        return $this->hasOne('App\Model\Book\Books', 'id', 'id');
+        return $this->hasOne('App\Model\Book\Books', 'id', 'book_id');
     }
 }
