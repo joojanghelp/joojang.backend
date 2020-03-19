@@ -20,6 +20,7 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::createBooksRead as createBooksReadTrait;
         BooksTrait::checkBooksReads as checkBooksReadsTrait;
         BooksTrait::getRecommenBooksAddUserRead as getRecommenBooksAddUserReadTrait;
+        BooksTrait::getBookInfo as getBookInfoTrait;
     }
 
     public function start()
@@ -160,8 +161,6 @@ class BooksRepository implements BooksRepositoryInterface
             ];
         }, json_decode(json_encode($this->getRecommenBooksAddUserReadTrait($Userid)), true));
 
-
-
         if(!$task) {
             return [
                 'state' => false,
@@ -217,6 +216,41 @@ class BooksRepository implements BooksRepositoryInterface
 
         return [
             'state' => true
+        ];
+    }
+
+    /**
+     * 책 상세 정보.
+     *
+     * @param integer $book_id
+     * @return array
+     */
+    public function getBookInfo(int $book_id) : array
+    {
+
+        $task = $this->getBookInfoTrait($book_id);
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        return [
+            'state' => true,
+            'data' => [
+                'uuid' => $task->uuid,
+                'user_id' => $task->user_id,
+                'user_name' => null,
+                'title' => $task->title,
+                'authors' => $task->authors,
+                'contents' => $task->contents,
+                'isbn' => $task->isbn,
+                'publisher' => $task->publisher,
+                'thumbnail' => $task->thumbnail,
+                'book_report' => []
+            ]
         ];
     }
 }
