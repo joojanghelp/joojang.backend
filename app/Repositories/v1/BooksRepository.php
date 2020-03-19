@@ -104,9 +104,6 @@ class BooksRepository implements BooksRepositoryInterface
         $task = $this->getUserBooksTrait($User->id);
 
         foreach($task as $element):
-            $user_books_number = $element['id'];
-            $book_id = $element['books']['id'];
-            $uuid = $element['books']['uuid'];
 
             $returnData[] = [
                     'list_id' => $element['id'],
