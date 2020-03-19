@@ -110,7 +110,7 @@ class BooksRepository implements BooksRepositoryInterface
 
             $returnData[] = [
                     'list_id' => $element['id'],
-                    'id' => $element['books']['id'],
+                    'book_id' => $element['books']['id'],
                     'uuid' => $element['books']['uuid'],
                     'title' => $element['books']['title'],
                     'authors' => $element['books']['authors'],
