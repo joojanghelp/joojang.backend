@@ -2,12 +2,10 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -54,6 +52,8 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        // print_r(get_class($exception));
+        // print_r(typeof $exception($request));
         // return parent::render($request, $exception);
         $logid = date('Ymdhis'); // 로그 고유값.
 
