@@ -52,6 +52,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
         Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
             Route::get('recommend', 'BooksController@recommend')->name('recommend');
             Route::get('{book_id}/detail', 'BooksController@detail')->name('detail'); // 사용자 프로필 데이터 전달.
+            Route::get('search', 'BooksController@search')->name('search'); // 사용자 프로필 데이터 전달.
         });
 	});
 });

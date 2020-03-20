@@ -185,6 +185,12 @@ trait BooksTrait
         return false;
     }
 
+    /**
+     * 사용자 독서 활동 등록.
+     *
+     * @param array $params
+     * @return void
+     */
     public function createUserBookActivity(array $params)
     {
         $task = UserBookActivity::create([
@@ -200,8 +206,29 @@ trait BooksTrait
         return $task->id;
     }
 
-    public function getUserBookActivity(int $book_id)
+    /**
+     * 사용자 독서 활동 리스트
+     *
+     * @param integer $book_id
+     * @return void
+     */
+    public function getUserBookActivity(int $book_id) : array
     {
         return UserBookActivity::with(['user', 'gubun'])->where('book_id', $book_id)->get()->toArray();
+    }
+
+    /**
+     * 책 검색.
+     *
+     * @param string $query
+     * @return void
+     */
+    public function booksSearch(string $query)
+    {
+        return Books::where('title', 'like', '%' . $query . '%')
+        ->orWhere('authors', 'like', '%' . $query . '%')
+        ->orWhere('contents', 'like', '%' . $query . '%')
+        ->orWhere('isbn', 'like', '%' . $query . '%')
+        ->orWhere('publisher', 'like', '%' . $query . '%')->get()->toArray();
     }
 }
