@@ -338,6 +338,7 @@ class BooksRepository implements BooksRepositoryInterface
 
         $activitys = array_map(function($element) {
             return [
+                'book_id' => $element['id'],
                 'uuid' => $element['uuid'],
                 'title' => $element['title'],
                 'authors' => $element['authors'],
