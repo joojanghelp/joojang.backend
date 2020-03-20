@@ -19,9 +19,11 @@ use Illuminate\Support\Facades\Route;
 // });
 Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 	Route::group(['namespace' => 'v1', 'prefix' => 'v1', 'as' => 'v1.'], function () {
+
         Route::get('test', 'TestController@test')->name('test');
 
         Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
+
             Route::post('login', 'AuthController@login')->name('login');
             // Route::group(['middleware' => 'auth:api'], function () {
                 Route::post('refresh_token', 'AuthController@refresh_token')->name('refresh_token');
@@ -36,11 +38,11 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::put('books', 'BooksController@update')->name('books.update');
             Route::delete('books', 'BooksController@delete')->name('books.delete');
 
-            Route::get('setting', 'UserController@get_setting')->name('setting'); // 사용자 설정 페이지.
-
             Route::post('books/activity', 'BooksController@create_activity')->name('activity.create');
-
             Route::post('books/recommend/read', 'BooksController@recommend_read')->name('books.recommend.read');
+
+            Route::get('setting', 'UserController@setting')->name('setting'); // 사용자 설정 페이지.
+            Route::post('setting/activity_state', 'UserController@update_activity')->name('setting.activity_state'); // 사용자 설정 페이지.
         });
 
         Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
