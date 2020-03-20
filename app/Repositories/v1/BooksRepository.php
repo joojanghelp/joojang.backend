@@ -23,6 +23,7 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::getBookInfo as getBookInfoTrait;
         BooksTrait::createUserBookActivity as createUserBookActivityTrait;
         BooksTrait::getUserBookActivity as getUserBookActivityTrait;
+        BooksTrait::booksSearch as booksSearchTrait;
     }
 
     public function start()
@@ -235,8 +236,6 @@ class BooksRepository implements BooksRepositoryInterface
             ];
         }
 
-        $activityTask = $this->getUserBookActivityTrait($book_id);
-
         $activitys = array_map(function($element) {
             return [
                 'activity_id' => $element['id'],
@@ -311,6 +310,54 @@ class BooksRepository implements BooksRepositoryInterface
         return [
             'state' => true,
             'message' => __('messages.default.do_success')
+        ];
+    }
+
+    /**
+     * 책 검색 리스트
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function attemptBookSearch(Request $request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'query' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $activitys = array_map(function($element) {
+            return [
+                'uuid' => $element['uuid'],
+                'title' => $element['title'],
+                'authors' => $element['authors'],
+                'contents' => $element['contents'],
+                'isbn' => $element['isbn'],
+                'publisher' => $element['publisher'],
+                'thumbnail' => $element['thumbnail'],
+            ];
+        }, $this->booksSearchTrait($request->input('query')));
+
+        if(empty($activitys)) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        return [
+            'state' => true,
+            'data' => $activitys
         ];
     }
 }

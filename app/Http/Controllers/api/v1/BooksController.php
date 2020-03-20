@@ -69,7 +69,21 @@ class BooksController extends BaseController
                 'message' => $task['message']
             ]);
         }
+    }
 
-
+    /**
+     * 책 검색.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function search(Request $request)
+    {
+        $task = $this->books->attemptBookSearch($request);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultListSuccessResponse($task['data']);
+        }
     }
 }
