@@ -16,14 +16,37 @@ class UserController extends BaseController
         $this->user = $user;
     }
 
-    public function setting(int $user_id)
+    /**
+     * 사용자 설정 정보.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function setting(Request $request)
     {
-        $task = $this->user->getSettingInfo($user_id);
+        $task = $this->user->getSettingInfo();
 
         if($task['state'] == false) {
             return BaseController::defaultListNothingResponse($task['message']);
         } else {
-            return BaseController::defaultListSuccessResponse($task['data']);
+            return BaseController::secondSuccessResponse($task['data']);
+        }
+    }
+
+    /**
+     * 활동 유무 업데이트
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function update_activity(Request $request)
+    {
+        $task = $this->user->update_activity($request);
+
+        if($task['state']) {
+            return BaseController::defaultSuccessCreateResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
         }
     }
 }
