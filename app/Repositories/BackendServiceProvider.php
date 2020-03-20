@@ -16,6 +16,9 @@ class BackendServiceProvider extends ServiceProvider
 
             'App\Repositories\v1\AuthRepositoryInterface',
             'App\Repositories\v1\BooksRepository',
+
+            'App\Repositories\v1\SystemRepositoryInterface',
+            'App\Repositories\v1\SystemRepository',
         );
     }
 }
