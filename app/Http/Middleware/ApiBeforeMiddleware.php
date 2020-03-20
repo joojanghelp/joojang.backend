@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 
 class ApiBeforeMiddleware
 {
@@ -24,10 +25,15 @@ class ApiBeforeMiddleware
         }
 
         $logid = date('Ymdhis');
+
+        $logRoute = Route::current();
+        $logRoutename = Route::currentRouteName();
+        $logRouteAction = Route::currentRouteAction();
+
         $logHeaderInfo = json_encode($request->header());
         $logBodyInfo = json_encode($request->all());
 
-        $logMessage = "ID:${logid} Header: {$logHeaderInfo} Body: ${logBodyInfo}";
+        $logMessage = "ID:${logid} RouteName:${logRoutename} RouteAction:${logRouteAction} Header: {$logHeaderInfo} Body: ${logBodyInfo}";
         Log::channel('requestlog')->error($logMessage);
 
 
