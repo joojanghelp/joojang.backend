@@ -37,4 +37,33 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    /**
+     * 독서 활동.
+     *
+     * @return void
+     */
+    public function activity()
+    {
+        return $this->hasMany('App\Model\Book\UserBookActivity', 'user_id', 'id');
+    }
+
+    public function read_book()
+    {
+        return $this->hasMany('App\Model\Book\UserReadBooks', 'user_id', 'id');
+    }
+
+    public function type()
+    {
+        return $this->hasOne('App\Model\Codes', 'code_id', 'type');
+    }
+    public function state()
+    {
+        return $this->hasOne('App\Model\Codes', 'code_id', 'state');
+    }
+    public function level()
+    {
+        return $this->hasOne('App\Model\Codes', 'code_id', 'level');
+    }
 }
