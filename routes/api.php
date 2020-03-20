@@ -45,6 +45,10 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::post('setting/activity_state', 'UserController@update_activity')->name('setting.activity_state'); // 사용자 설정 페이지.
         });
 
+        Route::group(['middleware' => 'auth:api', 'prefix' => 'system', 'as' => 'system.'], function () {
+            Route::get('commoncode', 'SystemController@commoncode')->name('commoncode.index');
+        });
+
         Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
             Route::get('recommend', 'BooksController@recommend')->name('recommend');
             Route::get('{book_id}/detail', 'BooksController@detail')->name('detail'); // 사용자 프로필 데이터 전달.
