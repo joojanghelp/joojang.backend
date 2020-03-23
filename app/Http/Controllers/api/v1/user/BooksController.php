@@ -48,6 +48,16 @@ class BooksController extends BaseController
         }
     }
 
+    public function index_page_type(int $page)
+    {
+        $task = $this->books->getBooksListPageType($page);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
+
     /**
      * 추천 목록에서 자기가 읽은 책 표시.
      *
