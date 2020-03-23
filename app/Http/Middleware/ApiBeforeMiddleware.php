@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiBeforeMiddleware
 {
@@ -30,10 +31,11 @@ class ApiBeforeMiddleware
         $logRoutename = Route::currentRouteName();
         $logRouteAction = Route::currentRouteAction();
 
+        $current_url = url()->current();
         $logHeaderInfo = json_encode($request->header());
         $logBodyInfo = json_encode($request->all());
 
-        $logMessage = "ID:${logid} RouteName:${logRoutename} RouteAction:${logRouteAction} Header: {$logHeaderInfo} Body: ${logBodyInfo}";
+        $logMessage = "ID:${logid} Current_url:${current_url} RouteName:${logRoutename} RouteAction:${logRouteAction} Header: {$logHeaderInfo} Body: ${logBodyInfo}";
         Log::channel('requestlog')->error($logMessage);
 
 
