@@ -46,6 +46,16 @@ class Books extends BaseModel
     }
 
     /**
+     * 관례 읽었는지 아닍. 체크..
+     *
+     * @return void
+     */
+    public function user_read()
+    {
+        return $this->hasOne('App\Model\Book\UserReadBooks', 'book_id', 'id');
+    }
+
+    /**
      * 관계 추천 도서.
      *
      * @return void

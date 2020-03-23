@@ -174,9 +174,11 @@ trait BooksTrait
      * @param integer $book_id
      * @return void
      */
-    public function getBookInfo(int $book_id)
+    public function getBookInfo(int $book_id, int $user_id)
     {
-        $taskResult = Books::where('id', $book_id)->get();
+        $taskResult = Books::with(['user_read' => function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        }])->where('id', $book_id)->get();
         if($taskResult->isNotEmpty()) {
 			$bookInfo = $taskResult->first();
 			return $bookInfo;
