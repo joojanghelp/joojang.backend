@@ -26,6 +26,7 @@ trait BooksTrait
             [
                 'uuid' => $params['uuid']
             ], [
+                'user_id' => $params['user_id'],
                 'authors' => $params['authors'],
                 'contents' => $params['contents'],
                 'isbn' => $params['isbn'],

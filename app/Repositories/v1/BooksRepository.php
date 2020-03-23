@@ -91,14 +91,16 @@ class BooksRepository implements BooksRepositoryInterface
 			];
         }
 
-        $Userid = $User->id;
-        $book_id = $this->createBooksTrait($request->all());
+        $user_id = Auth::id();
+        $createObject = $request->all();
+        $createObject['user_id'] = $user_id;
+        $book_id = $this->createBooksTrait($createObject);
 
         if(!$book_id) {
             throw new \App\Exceptions\CustomException(__('message.default.error'));
         }
 
-        $checkBook = $this->userBooksExitsTrait($Userid, $book_id);
+        $checkBook = $this->userBooksExitsTrait($user_id, $book_id);
 
         if($checkBook) {
             return [
@@ -107,7 +109,7 @@ class BooksRepository implements BooksRepositoryInterface
 			];
         }
 
-        $create = $this->createUserBooksTrait($Userid, $book_id);
+        $create = $this->createUserBooksTrait($user_id, $book_id);
 
         if(!$create) {
             throw new \App\Exceptions\CustomException(__('message.default.error'));
