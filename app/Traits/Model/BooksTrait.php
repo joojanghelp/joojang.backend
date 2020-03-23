@@ -219,7 +219,7 @@ trait BooksTrait
         if($task->isNotEmpty()) {
             $bookInfo = $task->toArray();
 
-            $activitys = array_filter(array_map(function($element) use ($user_id){
+            $activitys = array_values(array_filter(array_map(function($element) use ($user_id){
                 if($user_id == $element['user_id'] || $element['user']['activity_state'] == "Y") {
 
                     $date = Carbon::parse($element['created_at']);
@@ -234,7 +234,7 @@ trait BooksTrait
                         'create_at' => $date->format('Y년 m월 d일 H시:s분'),
                     ];
                 }
-            }, $bookInfo));
+            }, $bookInfo)));
 
 			return $activitys;
         }
