@@ -236,17 +236,9 @@ class BooksRepository implements BooksRepositoryInterface
             ];
         }
 
-        $activitys = array_map(function($element) {
-            return [
-                'activity_id' => $element['id'],
-                'user_id' => $element['user_id'],
-                'user_name' => $element['user']['name'],
-                'uid' => $element['uid'],
-                'gubun' => $element['gubun']['code_id'],
-                'gubun_name' => $element['gubun']['code_name'],
-                'contents' => $element['contents'],
-            ];
-        }, $this->getUserBookActivityTrait($book_id));
+        $user_id = Auth::id();
+
+        $activitys = $this->getUserBookActivityTrait($book_id, $user_id);
 
         return [
             'state' => true,
@@ -336,6 +328,8 @@ class BooksRepository implements BooksRepositoryInterface
 			];
         }
 
+        $searchQuery = $request->input('query');
+
         $activitys = array_map(function($element) {
             return [
                 'book_id' => $element['id'],
@@ -347,7 +341,7 @@ class BooksRepository implements BooksRepositoryInterface
                 'publisher' => $element['publisher'],
                 'thumbnail' => $element['thumbnail'],
             ];
-        }, $this->booksSearchTrait($request->input('query')));
+        }, $this->booksSearchTrait($searchQuery));
 
         if(empty($activitys)) {
             return [
