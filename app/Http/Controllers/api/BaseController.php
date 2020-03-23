@@ -104,7 +104,8 @@ class BaseController extends Controller
 		return response()->json([
             'messgae' => $message
         ], 400);
-	}
+    }
+
     /**
      * 기본 성공 응답 ( 리스트용 )
      *
@@ -115,6 +116,16 @@ class BaseController extends Controller
         return response()->json([
             'items' => $params
         ], 200);
+    }
+
+        /**
+     * 기본 성공 응답 ( 리스트용 )
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function defaultPageListSuccessResponse(array $params)
+    {
+        return response()->json($params, 200);
     }
 
     /**

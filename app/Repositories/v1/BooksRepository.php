@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator as FacadesValidator;
 use App\Helpers\MasterHelper;
 use App\Traits\Model\BooksTrait;
 
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class BooksRepository implements BooksRepositoryInterface
 {
     use BooksTrait {
@@ -29,6 +33,21 @@ class BooksRepository implements BooksRepositoryInterface
     public function start()
     {
         echo "::: BooksRepository start :::";
+    }
+
+    public function paginate($items, $perPage = 15, $page = null, $baseUrl = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        $lap = new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+
+        if ($baseUrl) {
+            $lap->setPath($baseUrl);
+        }
+
+        return $lap;
     }
 
     /**
@@ -171,6 +190,58 @@ class BooksRepository implements BooksRepositoryInterface
             'state' => true,
             'data' => $task
         ];
+    }
+
+    /**
+     * 추천 도서 페이징 타입.
+     *
+     * @param integer $page
+     * @return void
+     */
+    public function setRecommendBooksPageType(int $page)
+    {
+        $User = Auth::user();
+
+        $Userid = (isset($User->id) && $User->id) ? $User->id : 0;
+
+        $task = array_map(function($element) {
+            return [
+                'list_id' => $element['id'],
+                'gubun' => $element['gubun'],
+                'gubun_name' => $element['gubun_name'],
+                'book_id' => $element['book_id'],
+                'uuid' => $element['uuid'],
+                'title' => $element['title'],
+                'authors' => $element['authors'],
+                'contents' => $element['contents'],
+                'isbn' => $element['isbn'],
+                'publisher' => $element['publisher'],
+                'thumbnail' => $element['thumbnail'],
+                'read_check' => ($element['read_check'] == 1) ? true: false,
+            ];
+        }, json_decode(json_encode($this->getRecommenBooksAddUserReadTrait($Userid)), true));
+
+        $taskResult = $this->paginate($task, 30, $page)->toArray();
+
+        $dataObject = [];
+
+        foreach ($taskResult['data'] as $key => $element) {
+            $dataObject[] = $element;
+        }
+
+        $taskResult['data'] = $dataObject;
+
+        if(!$dataObject) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+
     }
 
     /**
