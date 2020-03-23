@@ -189,6 +189,11 @@ class BooksRepository implements BooksRepositoryInterface
 
         $taskResult = $this->paginateCollection($task, $this->pageRow, $page)->toArray();
 
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
+
         return [
             'state' => true,
             'data' => $taskResult
@@ -273,6 +278,11 @@ class BooksRepository implements BooksRepositoryInterface
         }
 
         $taskResult = $this->paginateCollection($task, $this->pageRow, $page)->toArray();
+
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
 
         return [
             'state' => true,
