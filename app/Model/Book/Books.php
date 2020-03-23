@@ -46,7 +46,7 @@ class Books extends BaseModel
     }
 
     /**
-     * 관례 읽었는지 아닍. 체크..
+     * 관계 읽었는지 아닌지. 체크..
      *
      * @return void
      */

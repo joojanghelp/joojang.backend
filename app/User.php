@@ -49,19 +49,41 @@ class User extends Authenticatable
         return $this->hasMany('App\Model\Book\UserBookActivity', 'user_id', 'id');
     }
 
+    /**
+     * 읽은 책 리스트.
+     *
+     * @return void
+     */
     public function read_book()
     {
         return $this->hasMany('App\Model\Book\UserReadBooks', 'user_id', 'id');
     }
 
+    /**
+     * 관계 사용자 타입.
+     *
+     * @return void
+     */
     public function type()
     {
         return $this->hasOne('App\Model\Codes', 'code_id', 'type');
     }
+
+    /**
+     * 사용자 상태...
+     *
+     * @return void
+     */
     public function state()
     {
         return $this->hasOne('App\Model\Codes', 'code_id', 'state');
     }
+
+    /**
+     * 사용자 레벨.
+     *
+     * @return void
+     */
     public function level()
     {
         return $this->hasOne('App\Model\Codes', 'code_id', 'level');

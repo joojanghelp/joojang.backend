@@ -6,6 +6,12 @@ use App\User;
 
 trait EmailAuthTrait
 {
+    /**
+     * 사용자 이메일 인증 처리.
+     *
+     * @param string $authCode
+     * @return array
+     */
     function webEmailAuthPageCheckTraitFunc(string $authCode) : array
     {
         $task = EmailAuth::with('user')->where('auth_code', $authCode);

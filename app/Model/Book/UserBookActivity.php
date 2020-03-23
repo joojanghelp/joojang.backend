@@ -35,11 +35,21 @@ class UserBookActivity extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * 구분 콛.
+     *
+     * @return void
+     */
     public function gubun()
     {
         return $this->hasOne('App\Model\Codes', 'code_id', 'gubun');
     }
 
+    /**
+     * 사용자 정보.
+     *
+     * @return void
+     */
     public function user()
     {
         return $this->hasOne('App\User', 'id', 'user_id');

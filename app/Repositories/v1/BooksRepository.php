@@ -37,6 +37,18 @@ class BooksRepository implements BooksRepositoryInterface
         echo "::: BooksRepository start :::";
     }
 
+    //TODO: 페이징 처리를 어디 에 옮겨야 함.
+
+    /**
+     * 페이징 함수 키값 있음.
+     *
+     * @param [type] $items
+     * @param integer $perPage
+     * @param [type] $page
+     * @param [type] $baseUrl
+     * @param array $options
+     * @return void
+     */
     public function paginate($items, $perPage = 15, $page = null, $baseUrl = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
@@ -52,6 +64,15 @@ class BooksRepository implements BooksRepositoryInterface
         return $lap;
     }
 
+    /**
+     * 페이징 함수. key 값업음.
+     *
+     * @param [type] $items
+     * @param integer $perPage
+     * @param [type] $page
+     * @param array $options
+     * @return void
+     */
     public function paginateCollection($items, $perPage = 15, $page = null, $options = [])
     {
         $page = $page ?: (\Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1);
@@ -163,6 +184,12 @@ class BooksRepository implements BooksRepositoryInterface
         ];
     }
 
+    /**
+     * 사용자 등록 책 리스트 페이징 타입.
+     *
+     * @param integer $page
+     * @return void
+     */
     public function getBooksListPageType(int $page)
     {
         $returnData = [];
