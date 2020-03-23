@@ -212,9 +212,52 @@ trait BooksTrait
      * @param integer $book_id
      * @return void
      */
-    public function getUserBookActivity(int $book_id) : array
+    public function getUserBookActivity(int $book_id, int $user_id) : array
     {
-        return UserBookActivity::with(['user', 'gubun'])->where('book_id', $book_id)->get()->toArray();
+        $task = UserBookActivity::with(['user', 'gubun'])->where('book_id', $book_id)->get();
+
+        if($task->isNotEmpty()) {
+            $bookInfo = $task->toArray();
+
+            $activitys = array_filter(array_map(function($element) use ($user_id){
+                if($user_id == $element['user_id'] || $element['activity_state'] == "Y") {
+                    return [
+                        'activity_id' => $element['id'],
+                        'user_id' => $element['user_id'],
+                        'user_name' => $element['user']['name'],
+                        'uid' => $element['uid'],
+                        'gubun' => $element['gubun']['code_id'],
+                        'gubun_name' => $element['gubun']['code_name'],
+                        'contents' => $element['contents'],
+                    ];
+                }
+            }, $bookInfo));
+
+			return $activitys;
+        }
+
+        return false;
+    }
+
+    /**
+     * 사용자 독서 활동 리스트
+     *
+     * @param integer $book_id
+     * @return void
+     */
+    public function getUserBookActivity2(int $book_id, int $user_id) : array
+    {
+        $task = UserBookActivity::with(['user' => function ($query) use ($user_id) {
+            $query->where('user_id', '<>', $user_id);
+            $query->where('activity_state', 'Y');
+        }, 'gubun'])->where('book_id', $book_id)->get();
+
+        if($task->isNotEmpty()) {
+			$bookInfo = $task->toArray();
+			return $bookInfo;
+        }
+
+        return false;
     }
 
     /**
@@ -223,7 +266,7 @@ trait BooksTrait
      * @param string $query
      * @return void
      */
-    public function booksSearch(string $query)
+    public function booksSearch(string $query) : array
     {
         return Books::where('title', 'like', '%' . $query . '%')
         ->orWhere('authors', 'like', '%' . $query . '%')
