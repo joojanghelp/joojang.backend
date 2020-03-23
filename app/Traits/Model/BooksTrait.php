@@ -120,7 +120,7 @@ trait BooksTrait
      * @param integer $user_id
      * @return void
      */
-    public function getUserBooks(int $user_id)
+    public function getUserBooks(int $user_id) : array
     {
         return UsersBooks::with('books')->where('user_id', $user_id)->get()->toArray();
     }

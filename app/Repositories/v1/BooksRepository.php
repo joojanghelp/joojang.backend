@@ -161,6 +161,40 @@ class BooksRepository implements BooksRepositoryInterface
         ];
     }
 
+    public function getBooksListPageType(int $page)
+    {
+        $returnData = [];
+        $user_id = Auth::id();
+
+        $task = array_map(function($element) {
+            return [
+                'list_id' => $element['id'],
+                'book_id' => $element['books']['id'],
+                'uuid' => $element['books']['uuid'],
+                'title' => $element['books']['title'],
+                'authors' => $element['books']['authors'],
+                'contents' => $element['books']['contents'],
+                'isbn' => $element['books']['isbn'],
+                'publisher' => $element['books']['publisher'],
+                'thumbnail' => $element['books']['thumbnail'],
+            ];
+        },  $this->getUserBooksTrait($user_id));
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $taskResult = $this->paginateCollection($task, $this->pageRow, $page)->toArray();
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+    }
+
     /**
      * 추천 도서 목록중 사용자가 읽은 책 표시.
      *
