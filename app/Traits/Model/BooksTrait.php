@@ -257,7 +257,7 @@ trait BooksTrait
 			return $bookInfo;
         }
 
-        return false;
+        return [];
     }
 
     /**
