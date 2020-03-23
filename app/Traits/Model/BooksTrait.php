@@ -236,7 +236,7 @@ trait BooksTrait
 			return $activitys;
         }
 
-        return false;
+        return [];
     }
 
     /**
