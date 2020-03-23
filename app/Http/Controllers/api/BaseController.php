@@ -90,7 +90,7 @@ class BaseController extends Controller
 	public function defaultSuccessCreateResponse()
 	{
 		return response()->json([
-            'messgae' => __('messages.default.do_success')
+            'message' => __('messages.default.do_success')
         ], 201);
 	}
 
@@ -102,7 +102,7 @@ class BaseController extends Controller
 	public function defaultCreateFailResponse(string $message)
 	{
 		return response()->json([
-            'messgae' => $message
+            'message' => $message
         ], 400);
     }
 
