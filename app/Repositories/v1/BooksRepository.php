@@ -252,7 +252,7 @@ class BooksRepository implements BooksRepositoryInterface
                 'isbn' => $task->isbn,
                 'publisher' => $task->publisher,
                 'thumbnail' => $task->thumbnail,
-                'book_activity' => $activitys
+                'book_activity' => (empty($activitys)) ? null : $activitys
             ]
         ];
     }
