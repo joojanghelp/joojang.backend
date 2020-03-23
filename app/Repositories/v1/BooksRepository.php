@@ -50,6 +50,14 @@ class BooksRepository implements BooksRepositoryInterface
         return $lap;
     }
 
+    public function paginateCollection($items, $perPage = 15, $page = null, $options = [])
+    {
+        $page = $page ?: (\Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof \Illuminate\Support\Collection ? $items : \Illuminate\Support\Collection::make($items);
+        return new \Illuminate\Pagination\LengthAwarePaginator(array_values($items->forPage($page, $perPage)->toArray()), $items->count(), $perPage, $page, $options);
+        //ref for array_values() fix: https://stackoverflow.com/a/38712699/3553367
+    }
+
     /**
      * 사용자 책 등록.
      *
@@ -221,22 +229,15 @@ class BooksRepository implements BooksRepositoryInterface
             ];
         }, json_decode(json_encode($this->getRecommenBooksAddUserReadTrait($Userid)), true));
 
-        $taskResult = $this->paginate($task, 30, $page)->toArray();
-
-        $dataObject = [];
-
-        foreach ($taskResult['data'] as $key => $element) {
-            $dataObject[] = $element;
-        }
-
-        $taskResult['data'] = $dataObject;
-
-        if(!$dataObject) {
+        if(!$task) {
             return [
                 'state' => false,
                 'message' => __('messages.error.nothing')
             ];
         }
+
+        $taskResult = $this->paginateCollection($task, 30, $page)->toArray();
+
         return [
             'state' => true,
             'data' => $taskResult
