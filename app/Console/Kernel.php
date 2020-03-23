@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\BooksCommand::class,
         Commands\CodesCommand::class,
+        Commands\UsersCommand::class,
     ];
 
     /**
