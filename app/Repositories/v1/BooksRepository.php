@@ -282,6 +282,14 @@ class BooksRepository implements BooksRepositoryInterface
 			];
         }
 
+        $bookExits = $this->getBookInfoTrait($request->input('book_id'));
+        if(!$bookExits) {
+            return [
+				'state' => false,
+				'message' => __('messages.error.book_nothing')
+			];
+        }
+
         $createObject = [
             'book_id' => $request->input('book_id'),
             'user_id' => Auth::id(),
