@@ -19,7 +19,7 @@ class BooksCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'books:test_recommand';
+    protected $signature = 'books:manager {options : manager options}';
 
     /**
      * The console command description.
@@ -45,13 +45,35 @@ class BooksCommand extends Command
      */
     public function handle()
     {
-        $this->init();
+
+        $option = $this->argument('options');
+
+        if($option == "test_recommand") {
+            $this->test_recommand_init();
+        } else if($option == "books_user_id"){
+            $this->books_user_id_init();
+        }
 
         return true;
     }
 
+    public function books_user_id_init()
+    {
+        $task = UsersBooks::all();
 
-    public function init()
+        $task->each(function($result){
+            $task = $result->toArray();
+
+            $book_id = $task['id'];
+            $user_id = $task['user_id'];
+
+            Books::find($book_id)->update(['user_id' => $user_id]);
+
+        });
+    }
+
+
+    public function test_recommand_init()
     {
         $this->initCategory();
         $this->initBooks();
