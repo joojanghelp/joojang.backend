@@ -364,7 +364,7 @@ class BooksRepository implements BooksRepositoryInterface
             'data' => [
                 'uuid' => $task->uuid,
                 'user_id' => $task->user_id,
-                'user_name' => null,
+                'user_name' => $task->user->name,
                 'title' => $task->title,
                 'authors' => $task->authors,
                 'contents' => $task->contents,

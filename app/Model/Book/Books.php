@@ -64,4 +64,14 @@ class Books extends BaseModel
     {
         return $this->hasOne('App\Model\Book\RecommendBooks', 'id', 'book_id');
     }
+
+    /**
+     * 사용자 정보
+     *
+     * @return void
+     */
+    public function user()
+    {
+        return $this->hasOne('App\User', 'id', 'user_id');
+    }
 }

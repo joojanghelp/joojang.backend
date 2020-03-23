@@ -179,7 +179,7 @@ trait BooksTrait
     {
         $taskResult = Books::with(['user_read' => function ($query) use ($user_id) {
             $query->where('user_id', $user_id);
-        }])->where('id', $book_id)->get();
+        }, 'user'])->where('id', $book_id)->get();
         if($taskResult->isNotEmpty()) {
 			$bookInfo = $taskResult->first();
 			return $bookInfo;
