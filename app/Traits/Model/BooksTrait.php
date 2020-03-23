@@ -220,7 +220,7 @@ trait BooksTrait
             $bookInfo = $task->toArray();
 
             $activitys = array_filter(array_map(function($element) use ($user_id){
-                if($user_id == $element['user_id'] || $element['activity_state'] == "Y") {
+                if($user_id == $element['user_id'] || $element['user']['activity_state'] == "Y") {
                     return [
                         'activity_id' => $element['id'],
                         'user_id' => $element['user_id'],
