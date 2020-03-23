@@ -15,6 +15,8 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class BooksRepository implements BooksRepositoryInterface
 {
+    protected $pageRow = 30;
+
     use BooksTrait {
         BooksTrait::createBooks as createBooksTrait;
         BooksTrait::userBooksExits as userBooksExitsTrait;
@@ -236,7 +238,7 @@ class BooksRepository implements BooksRepositoryInterface
             ];
         }
 
-        $taskResult = $this->paginateCollection($task, 30, $page)->toArray();
+        $taskResult = $this->paginateCollection($task, $this->pageRow, $page)->toArray();
 
         return [
             'state' => true,
