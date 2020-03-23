@@ -174,9 +174,11 @@ trait BooksTrait
      * @param integer $book_id
      * @return void
      */
-    public function getBookInfo(int $book_id)
+    public function getBookInfo(int $book_id, int $user_id)
     {
-        $taskResult = Books::where('id', $book_id)->get();
+        $taskResult = Books::with(['user_read' => function ($query) use ($user_id) {
+            $query->where('user_id', $user_id);
+        }])->where('id', $book_id)->get();
         if($taskResult->isNotEmpty()) {
 			$bookInfo = $taskResult->first();
 			return $bookInfo;
@@ -219,7 +221,7 @@ trait BooksTrait
         if($task->isNotEmpty()) {
             $bookInfo = $task->toArray();
 
-            $activitys = array_filter(array_map(function($element) use ($user_id){
+            $activitys = array_values(array_filter(array_map(function($element) use ($user_id){
                 if($user_id == $element['user_id'] || $element['user']['activity_state'] == "Y") {
 
                     $date = Carbon::parse($element['created_at']);
@@ -234,7 +236,7 @@ trait BooksTrait
                         'create_at' => $date->format('Y년 m월 d일 H시:s분'),
                     ];
                 }
-            }, $bookInfo));
+            }, $bookInfo)));
 
 			return $activitys;
         }

@@ -227,7 +227,8 @@ class BooksRepository implements BooksRepositoryInterface
      */
     public function getBookInfo(int $book_id) : array
     {
-        $task = $this->getBookInfoTrait($book_id);
+        $user_id = Auth::id();
+        $task = $this->getBookInfoTrait($book_id, $user_id);
 
         if(!$task) {
             return [
@@ -235,8 +236,6 @@ class BooksRepository implements BooksRepositoryInterface
                 'message' => __('messages.error.nothing')
             ];
         }
-
-        $user_id = Auth::id();
 
         $activitys = $this->getUserBookActivityTrait($book_id, $user_id);
 
@@ -252,6 +251,7 @@ class BooksRepository implements BooksRepositoryInterface
                 'isbn' => $task->isbn,
                 'publisher' => $task->publisher,
                 'thumbnail' => $task->thumbnail,
+                'read_check' => (empty($task->user_read)) ? false: true,
                 'book_activity' => (empty($activitys)) ? null : $activitys
             ]
         ];
