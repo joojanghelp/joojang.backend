@@ -35,7 +35,11 @@ class EmailAuth extends Model
         // 'email_verified_at' => 'datetime',
     ];
 
-
+    /**
+     * 관계. 사용자 정보.
+     *
+     * @return void
+     */
     public function user()
     {
         return $this->belongsTo('App\User' , 'user_uuid', 'uuid');

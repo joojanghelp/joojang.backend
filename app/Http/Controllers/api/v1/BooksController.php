@@ -87,6 +87,12 @@ class BooksController extends BaseController
         }
     }
 
+    /**
+     * 추천 도서 페이징 타입.
+     *
+     * @param integer $page
+     * @return void
+     */
     public function recommend_pagetype(int $page)
     {
         $task = $this->books->setRecommendBooksPageType($page);

@@ -7,6 +7,13 @@ use Illuminate\Support\Facades\DB;
 trait PassportTrait
 {
 
+    /**
+     * Oauth2 토큰 생성. ( passport )
+     *
+     * @param string $email
+     * @param string $password
+     * @return void
+     */
     public function getNewToken(string $email, string $password) {
 
         $client = DB::table('oauth_clients')->where('password_client', true)->first();
@@ -35,6 +42,12 @@ trait PassportTrait
         ];
     }
 
+    /**
+     * Oauth2 토큰 리프레쉬 ( passport )
+     *
+     * @param string $refresh_token
+     * @return array
+     */
     public function getRefreshTokenTrait(string $refresh_token) : array
     {
         $client = DB::table('oauth_clients')->where('password_client', true)->first();

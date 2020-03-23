@@ -35,6 +35,11 @@ class UsersBooks extends BaseModel
         // 'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * 관계. 책 정보.
+     *
+     * @return void
+     */
     public function books()
     {
         return $this->hasOne('App\Model\Book\Books', 'id', 'book_id');

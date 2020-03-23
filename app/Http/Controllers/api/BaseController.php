@@ -118,7 +118,7 @@ class BaseController extends Controller
         ], 200);
     }
 
-        /**
+    /**
      * 기본 성공 응답 ( 리스트용 )
      *
      * @return \Illuminate\Http\Response

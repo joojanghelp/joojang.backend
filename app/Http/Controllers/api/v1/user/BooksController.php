@@ -48,6 +48,12 @@ class BooksController extends BaseController
         }
     }
 
+    /**
+     * 사용자 등록 책 리스트 페이징 타입.
+     *
+     * @param integer $page
+     * @return void
+     */
     public function index_page_type(int $page)
     {
         $task = $this->books->getBooksListPageType($page);
@@ -84,6 +90,12 @@ class BooksController extends BaseController
         return __FUNCTION__;
     }
 
+    /**
+     * 독서 활동 등록.
+     *
+     * @param Request $request
+     * @return void
+     */
     public function create_activity(Request $request)
     {
         $task = $this->books->attemptCreateActivity($request);

@@ -10,6 +10,12 @@ class AuthController extends Controller
 {
     use EmailAuthTrait;
 
+    /**
+     * 이메일 인증 컨트롤러.
+     *
+     * @param Request $request
+     * @return void
+     */
     public function email_auth(Request $request)
     {
 		$input = $request->only('code');

@@ -16,7 +16,7 @@ class SystemRepository implements SystemRepositoryInterface
     }
 
     /**
-     * 사용자 책 등록.
+     * 공통 코드?
      *
      * @param Request $request
      * @return array

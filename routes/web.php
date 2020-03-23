@@ -20,10 +20,10 @@ Route::get('/', function () {
 
 Route::group(['namespace' => 'web', 'prefix' => 'web', 'as' => 'web.'], function () {
 	Route::group(['namespace' => 'v1', 'prefix' => 'v1', 'as' => 'v1.'], function () {
-        Route::get('test', 'AuthController@test')->name('test');
+        Route::get('test', 'AuthController@test')->name('test'); // 테스트용.
 
         Route::group(['prefix' => 'auth','as' => 'auth.'], function () {
-            Route::get('email_auth', 'AuthController@email_auth')->name('email_auth');
+            Route::get('email_auth', 'AuthController@email_auth')->name('email_auth');// 회원 이메일 인증.
 
         });
 
