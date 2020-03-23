@@ -86,4 +86,14 @@ class BooksController extends BaseController
             return BaseController::defaultListSuccessResponse($task['data']);
         }
     }
+
+    public function recommend_pagetype(int $page)
+    {
+        $task = $this->books->setRecommendBooksPageType($page);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
 }
