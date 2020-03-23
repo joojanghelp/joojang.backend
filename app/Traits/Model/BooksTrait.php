@@ -10,7 +10,7 @@ use App\Model\Book\Books;
 use App\Model\Book\RecommendBooks;
 use App\Model\Book\UserReadBooks;
 use App\Model\Book\UserBookActivity;
-
+use Carbon\Carbon;
 trait BooksTrait
 {
 
@@ -221,6 +221,8 @@ trait BooksTrait
 
             $activitys = array_filter(array_map(function($element) use ($user_id){
                 if($user_id == $element['user_id'] || $element['user']['activity_state'] == "Y") {
+
+                    $date = Carbon::parse($element['created_at']);
                     return [
                         'activity_id' => $element['id'],
                         'user_id' => $element['user_id'],
@@ -229,6 +231,7 @@ trait BooksTrait
                         'gubun' => $element['gubun']['code_id'],
                         'gubun_name' => $element['gubun']['code_name'],
                         'contents' => $element['contents'],
+                        'create_at' => $date->format('Y년 m월 d일 H시:s분'),
                     ];
                 }
             }, $bookInfo));
