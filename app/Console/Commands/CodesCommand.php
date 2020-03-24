@@ -147,7 +147,7 @@ class CodesCommand extends Command
                 ],
             'B11' =>
 				[
-					[ 'code_id' => '000', 'code_name' => '없음' ],
+					[ 'code_id' => '000', 'code_name' => '전체' ],
                     [ 'code_id' => '110', 'code_name' => '초등학교 1학년' ],
                     [ 'code_id' => '120', 'code_name' => '초등학교 2학년' ],
                     [ 'code_id' => '130', 'code_name' => '초등학교 3학년' ],
