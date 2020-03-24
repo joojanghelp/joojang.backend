@@ -14,4 +14,20 @@ trait SystemTrait
     {
         return Codes::all()->toArray();
     }
+
+    /**
+     * 그룹코드 조회용.
+     *
+     * @param string $group_id
+     * @return void
+     */
+    public function getCodeGroupList(string $group_id) : array
+    {
+        $task = Codes::whereNotNull('code_id')->where('group_id', $group_id)->where('active', 'Y')->get();
+        if($task->isNotEmpty()) {
+            return $task->toArray();
+        } else {
+            return [];
+        }
+    }
 }
