@@ -116,6 +116,23 @@ trait BooksTrait
     }
 
     /**
+     * 활동 정보 전달.
+     *
+     * @param integer $Activity_id
+     * @return void
+     */
+    public function getActivityInfo(int $Activity_id)
+    {
+        $task = UserBookActivity::where('id', $Activity_id)->get();
+
+        if($task->isNotEmpty()) {
+            return $task->first()->toArray();
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 사용자 등록 책 리스트.
      *
      * @param integer $user_id
@@ -268,6 +285,7 @@ trait BooksTrait
                         'gubun_name' => $element['gubun']['code_name'],
                         'contents' => $element['contents'],
                         'create_at' => $date->format('Y년 m월 d일 H시:s분'),
+                        'delete_permission' => ($user_id == $element['user_id']) ? true : false
                     ];
                 }
             }, $bookInfo)));
@@ -312,5 +330,10 @@ trait BooksTrait
         ->orWhere('contents', 'like', '%' . $query . '%')
         ->orWhere('isbn', 'like', '%' . $query . '%')
         ->orWhere('publisher', 'like', '%' . $query . '%')->get()->toArray();
+    }
+
+    public function deleteActivity(int $activity_id)
+    {
+        return UserBookActivity::where('id', $activity_id)->delete();
     }
 }

@@ -33,6 +33,8 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::booksSearch as booksSearchTrait;
         BooksTrait::getRecommenBooksAddUserReadGubun as getRecommenBooksAddUserReadGubunTrait;
         MasterTrait::getCodeToName as getCodeToNameTrait;
+        BooksTrait::getActivityInfo as getActivityInfoTrait;
+        BooksTrait::deleteActivity as deleteActivityTrait;
     }
 
     public function start()
@@ -566,6 +568,62 @@ class BooksRepository implements BooksRepositoryInterface
         return [
             'state' => true,
             'data' => $activitys
+        ];
+    }
+
+    /**
+     * 독서 활동 삭제 처리.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function delete_activity(Request $request)
+    {
+
+        $validator = FacadesValidator::make($request->all(), [
+            'activity_id' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $activity_id = $request->input('activity_id');
+        $user_uid = Auth::id();
+
+        $checkTask = $this->getActivityInfoTrait($activity_id);
+        if(!$checkTask) {
+            return [
+				'state' => false,
+				'message' => __('messages.error.nothing')
+			];
+        }
+
+        if($checkTask['user_id'] != $user_uid) {
+            return [
+				'state' => false,
+				'message' => __('messages.error.nothing_delete_permission')
+			];
+        }
+
+        $deleteTask = $this->deleteActivityTrait($activity_id);
+
+        if(!$deleteTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+
+        return [
+            'state' => true
         ];
     }
 }
