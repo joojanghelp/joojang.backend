@@ -31,4 +31,20 @@ class SystemController extends BaseController
             return BaseController::defaultListSuccessResponse($task['data']);
         }
     }
+
+    /**
+     * 그룹 코드 리스트 조회.
+     *
+     * @param string $group_code
+     * @return void
+     */
+    public function commoncode_group_list(string $group_code)
+    {
+        $task = $this->system->attemptGroupCodeList($group_code);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultListSuccessResponse($task['data']);
+        }
+    }
 }

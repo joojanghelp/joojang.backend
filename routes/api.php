@@ -48,6 +48,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 
         Route::group(['middleware' => 'auth:api', 'prefix' => 'system', 'as' => 'system.'], function () {
             Route::get('commoncode', 'SystemController@commoncode')->name('commoncode.index'); // 시스템 공통 코드.
+            Route::get('commoncode/group/{group_id}/list', 'SystemController@commoncode_group_list')->name('commoncode.group.list'); // 시스템 공통 코드 리스트 조회?.
         });
 
         Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
