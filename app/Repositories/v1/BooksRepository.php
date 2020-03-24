@@ -35,6 +35,7 @@ class BooksRepository implements BooksRepositoryInterface
         MasterTrait::getCodeToName as getCodeToNameTrait;
         BooksTrait::getActivityInfo as getActivityInfoTrait;
         BooksTrait::deleteActivity as deleteActivityTrait;
+        BooksTrait::deleteReadBook as deleteReadBookTrait;
     }
 
     public function start()
@@ -415,6 +416,52 @@ class BooksRepository implements BooksRepositoryInterface
         $task = $this->createBooksReadTrait($User->id, $request->input('book_id'));
 
         if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+
+        return [
+            'state' => true
+        ];
+    }
+
+    /**
+     * 책 읽음 삭제 처리.
+     */
+    public function setRecommendReadDelete(Request $request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+			'book_id' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $book_id = $request->input('book_id');
+        $user_id = Auth::id();
+
+        $checkTask = $this->checkBooksReadsTrait($user_id, $book_id);
+
+        if(!$checkTask) {
+            return [
+				'state' => false,
+				'message' => __('messages.error.nothing')
+			];
+        }
+
+        $deleteTask = $this->deleteReadBookTrait($user_id, $book_id);
+
+        if(!$deleteTask) {
             return [
                 'state' => false,
                 'message' => __('messages.default.error')

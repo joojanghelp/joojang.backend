@@ -80,6 +80,22 @@ class BooksController extends BaseController
         }
     }
 
+    /**
+     * 책 읽음 표시 삭제.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function recommend_read_delete(Request $request) {
+        $task = $this->books->setRecommendReadDelete($request);
+
+        if($task['state']) {
+            return BaseController::defaultDeleteSuccessResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
+        }
+    }
+
     public function update()
     {
         return __FUNCTION__;

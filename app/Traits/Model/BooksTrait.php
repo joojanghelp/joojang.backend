@@ -336,8 +336,25 @@ trait BooksTrait
         ->orWhere('publisher', 'like', '%' . $query . '%')->get()->toArray();
     }
 
+    /**
+     * 독서 활동 삭제.
+     *
+     * @param integer $activity_id
+     * @return void
+     */
     public function deleteActivity(int $activity_id)
     {
         return UserBookActivity::where('id', $activity_id)->delete();
+    }
+
+    /**
+     * 독서 읽음 삭제.
+     *
+     * @param integer $activity_id
+     * @return void
+     */
+    public function deleteReadBook(int $user_id, int $book_id)
+    {
+        return UserReadBooks::where('user_id', $user_id)->where('book_id', $book_id)->delete();
     }
 }
