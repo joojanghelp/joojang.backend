@@ -170,6 +170,39 @@ trait BooksTrait
     }
 
     /**
+     *  추천 도서 카테기로별 리스트.
+     *
+     * @param string $user_id
+     * @return void
+     */
+    public function getRecommenBooksAddUserReadGubun(string $gubun, string $user_id) : array
+    {
+        return DB::table('tbl_recommend_books_list_master')
+        ->select(DB::raw("
+        tbl_recommend_books_list_master.id,
+            tbl_recommend_books_list_master.book_id,
+            tbl_recommend_books_list_master.gubun,
+            tbl_codes_master.code_name as gubun_name,
+            tbl_books_master.uuid,
+            tbl_books_master.title,
+            tbl_books_master.authors,
+            tbl_books_master.contents,
+            tbl_books_master.isbn,
+            tbl_books_master.publisher,
+            tbl_books_master.thumbnail,
+            IF(tbl_user_read_books_list.book_id, 1, 0) as read_check
+        "))
+        ->leftJoin('tbl_books_master', 'tbl_recommend_books_list_master.book_id', '=', 'tbl_books_master.id')
+        ->leftJoin('tbl_user_read_books_list', function ($join) use ($user_id) {
+            $join->on('tbl_recommend_books_list_master.book_id', '=', 'tbl_user_read_books_list.book_id')
+                 ->where('tbl_user_read_books_list.user_id', '=', $user_id);
+        })
+        ->leftJoin('tbl_codes_master', 'tbl_recommend_books_list_master.gubun', '=', 'tbl_codes_master.code_id')
+        ->where('tbl_recommend_books_list_master.gubun', $gubun)
+        ->get()->toArray();
+    }
+
+    /**
      * 책 상세 정보.
      *
      * @param integer $book_id
