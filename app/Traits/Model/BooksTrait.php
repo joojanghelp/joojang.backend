@@ -215,7 +215,11 @@ trait BooksTrait
                  ->where('tbl_user_read_books_list.user_id', '=', $user_id);
         })
         ->leftJoin('tbl_codes_master', 'tbl_recommend_books_list_master.gubun', '=', 'tbl_codes_master.code_id')
-        ->where('tbl_recommend_books_list_master.gubun', $gubun)
+        ->where(function($query) use($gubun) {
+            if($gubun != 'B11000') {
+                $query->where('gubun', $gubun);
+            }
+        })
         ->get()->toArray();
     }
 
