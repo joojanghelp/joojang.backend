@@ -429,7 +429,7 @@ class BooksRepository implements BooksRepositoryInterface
 			];
         }
 
-        $bookExits = $this->getBookInfoTrait($request->input('book_id'));
+        $bookExits = $this->getBookInfoTrait($request->input('book_id'), Auth::id());
         if(!$bookExits) {
             return [
 				'state' => false,
