@@ -53,6 +53,23 @@ class BooksController extends BaseController
     }
 
     /**
+     * 권장 도서 카테고리 구분 페이징 타입.
+     *
+     * @param string $gubun
+     * @param integer $page
+     * @return void
+     */
+    public function recommend_category(string $gubun, int $page)
+    {
+        $task = $this->books->setRecommendBooksCategoryPageType($gubun, $page);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
+
+    /**
      * 책 상세 정보.
      *
      * @param integer $book_id

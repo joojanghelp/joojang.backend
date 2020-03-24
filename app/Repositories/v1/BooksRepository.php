@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator as FacadesValidator;
 use App\Helpers\MasterHelper;
 use App\Traits\Model\BooksTrait;
+use App\Traits\Model\MasterTrait;
 
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -17,7 +18,7 @@ class BooksRepository implements BooksRepositoryInterface
 {
     protected $pageRow = 30;
 
-    use BooksTrait {
+    use BooksTrait, MasterTrait{
         BooksTrait::createBooks as createBooksTrait;
         BooksTrait::userBooksExits as userBooksExitsTrait;
         BooksTrait::createUserBooks as createUserBooksTrait;
@@ -30,6 +31,8 @@ class BooksRepository implements BooksRepositoryInterface
         BooksTrait::createUserBookActivity as createUserBookActivityTrait;
         BooksTrait::getUserBookActivity as getUserBookActivityTrait;
         BooksTrait::booksSearch as booksSearchTrait;
+        BooksTrait::getRecommenBooksAddUserReadGubun as getRecommenBooksAddUserReadGubunTrait;
+        MasterTrait::getCodeToName as getCodeToNameTrait;
     }
 
     public function start()
@@ -268,6 +271,61 @@ class BooksRepository implements BooksRepositoryInterface
             'state' => true,
             'data' => $task
         ];
+    }
+
+    /**
+     * 권장 도서 카테고리멸 페이징 타입.
+     *
+     * @param string $gubun
+     * @param integer $page
+     * @return void
+     */
+    public function setRecommendBooksCategoryPageType(string $gubun, int $page)
+    {
+        $user_id = Auth::id();
+
+        $code_name = $this->getCodeToNameTrait($gubun);
+
+        $task = array_map(function($element) {
+            return [
+                'list_id' => $element['id'],
+                'gubun' => $element['gubun'],
+                'gubun_name' => $element['gubun_name'],
+                'book_id' => $element['book_id'],
+                'uuid' => $element['uuid'],
+                'title' => $element['title'],
+                'authors' => $element['authors'],
+                'contents' => $element['contents'],
+                'isbn' => $element['isbn'],
+                'publisher' => $element['publisher'],
+                'thumbnail' => $element['thumbnail'],
+                'read_check' => ($element['read_check'] == 1) ? true: false,
+            ];
+        }, json_decode(json_encode($this->getRecommenBooksAddUserReadGubunTrait($gubun, $user_id)), true));
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $taskResult = $this->paginateCollection($task, $this->pageRow, $page)->toArray();
+
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
+
+        $taskResult['current_category']['code'] = $gubun;
+        $taskResult['current_category']['name'] = $code_name;
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+
+
     }
 
     /**

@@ -52,6 +52,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 
         Route::group(['middleware' => 'auth:api', 'prefix' => 'books', 'as' => 'books.'], function () {
             Route::get('recommend', 'BooksController@recommend')->name('recommend'); // 추천 도서 리스트.
+            Route::get('{gubun}/recommend/page/{page}', 'BooksController@recommend_category')->name('recommend_category'); // 추천 도서 카테고리별 페이징.
             Route::get('recommend/page/{page}', 'BooksController@recommend_pagetype')->name('recommend_page_type'); // 추천 도서 리스트 페이징 타입.
             Route::get('{book_id}/detail', 'BooksController@detail')->name('detail'); // 책 상세 정보.
             Route::get('search', 'BooksController@search')->name('search'); // 책 검색.
