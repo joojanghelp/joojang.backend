@@ -21,5 +21,6 @@ return [
         'exits' => '이미 등록 되어 있습니다.',
         'nothing' => '데이터가 존재 하지 않습니다.',
         'book_nothing' => '존재 하지 않는 책 정보 입니다.',
+        'nothing_delete_permission' => '삭제 할수 있는 권한이 없습니다.',
     ],
 ];

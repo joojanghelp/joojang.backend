@@ -140,4 +140,17 @@ class BaseController extends Controller
             'message' => $params
         ], 200);
     }
+
+    /**
+     * 에러는 아니지만 데이터가 없을때.
+     *
+     * @param string $params
+     * @return void
+     */
+    public function defaultDeleteSuccessResponse()
+    {
+        return response()->json([
+            'message' => __('messages.default.do_success')
+        ], 200);
+    }
 }

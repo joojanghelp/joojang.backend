@@ -106,4 +106,20 @@ class BooksController extends BaseController
             return BaseController::defaultCreateFailResponse($task['message']);
         }
     }
+
+    /**
+     * 독서 활동 삭제.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function delete_activity(Request $request)
+    {
+        $task = $this->books->delete_activity($request);
+        if($task['state']) {
+            return BaseController::defaultDeleteSuccessResponse();
+        } else {
+            return BaseController::defaultCreateFailResponse($task['message']);
+        }
+    }
 }

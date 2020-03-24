@@ -40,6 +40,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::delete('books', 'BooksController@delete')->name('books.delete'); // 삭제?
 
             Route::post('books/activity', 'BooksController@create_activity')->name('activity.create'); // 독서 활동 등록.
+            Route::delete('books/activity', 'BooksController@delete_activity')->name('activity.detele'); // 독서 활동 삭제.
             Route::post('books/recommend/read', 'BooksController@recommend_read')->name('books.recommend.read'); // 읽은 책 등록.
 
             Route::get('setting', 'UserController@setting')->name('setting'); // 사용자 설정 페이지.
