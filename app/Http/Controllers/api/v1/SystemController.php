@@ -47,4 +47,20 @@ class SystemController extends BaseController
             return BaseController::defaultListSuccessResponse($task['data']);
         }
     }
+
+    /**
+     * 시스템 기본 데이터.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function basedata(Request $request)
+    {
+        $task = $this->system->attemptBaseData($request);
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultListSuccessResponse($task['data']);
+        }
+    }
 }
