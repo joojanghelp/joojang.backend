@@ -74,4 +74,30 @@ class SystemRepository implements SystemRepositoryInterface
             'data' => $activitys
         ];
     }
+
+    /**
+     * 시스템 기본 데이터.
+     *
+     * @param [type] $request
+     * @return void
+     */
+    public function attemptBaseData($request)
+    {
+
+        $codes = [];
+        foreach ($this->getCodeTrait() as $element) :
+            if($element['code_id']) {
+                $codes[$element['group_id']][] = [
+                    'code_id' => $element['code_id'],
+                    'code_name' => $element['code_name'],
+                ];
+            }
+        endforeach;
+        return [
+            'state' => true,
+            'data' => [
+                'code_list' => $codes
+            ]
+        ];
+    }
 }

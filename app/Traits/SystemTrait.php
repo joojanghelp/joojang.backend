@@ -10,7 +10,7 @@ trait SystemTrait
      *
      * @return void
      */
-    public function getCode()
+    public function getCode() : array
     {
         return Codes::all()->toArray();
     }
