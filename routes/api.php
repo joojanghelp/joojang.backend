@@ -48,6 +48,15 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::post('setting/activity_state', 'UserController@update_activity')->name('setting.activity_state'); // 사용자 설정 활동 여부 수정.
         });
 
+
+
+        Route::group(['middleware' => 'auth:api', 'namespace' => 'admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {            // 어드민 관련 API
+            Route::get('users/page/{page}', 'AdminController@user_list')->name('user.liist'); // 사용자 리스트.
+        });
+
+
+
+
         Route::group(['middleware' => 'auth:api', 'prefix' => 'system', 'as' => 'system.'], function () {
             Route::get('basedata', 'SystemController@basedata')->name('basedata'); // 기본 데이터.
 

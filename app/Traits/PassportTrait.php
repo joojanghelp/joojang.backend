@@ -63,15 +63,25 @@ trait PassportTrait
         $tokenRequest = Request::create('/oauth/token', 'POST', $dataObject);
         $tokenRequestResult = json_decode(app()->handle($tokenRequest)->getContent());
 
-        if(isset($tokenRequestResult->error_message) && $tokenRequestResult->error_message) {
-            throw new \App\Exceptions\CustomException($tokenRequestResult->error_message);
+        if(isset($tokenRequestResult->error) && $tokenRequestResult->error) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.bad_token')
+            ];
+        }
+
+        if(!$tokenRequestResult) {
+            throw new \App\Exceptions\CustomException(__('messages.defaut.error'));
         }
 
         return [
-            'token_type' => $tokenRequestResult->token_type,
-            'expires_in' => $tokenRequestResult->expires_in,
-            'access_token' => $tokenRequestResult->access_token,
-            'refresh_token' => $tokenRequestResult->refresh_token
+            'state' => true,
+            'token' => [
+                'token_type' => $tokenRequestResult->token_type,
+                'expires_in' => $tokenRequestResult->expires_in,
+                'access_token' => $tokenRequestResult->access_token,
+                'refresh_token' => $tokenRequestResult->refresh_token
+            ]
         ];
     }
 

@@ -9,7 +9,7 @@ return [
 	'default' => [
 		'success' => '정상 전송 하였습니다.',
 		'do_success' => '정상 처리 하였습니다.',
-		'error' => '처리중 문제가 발생했습니다.',
+		'error' => '처리 도중 문제가 발생했습니다.',
 	],
 
 	'success' => [
@@ -22,5 +22,7 @@ return [
         'nothing' => '데이터가 존재 하지 않습니다.',
         'book_nothing' => '존재 하지 않는 책 정보 입니다.',
         'nothing_delete_permission' => '삭제 할수 있는 권한이 없습니다.',
+        'token_nothing' => '토큰 정보를 찾을수 없습니다.',
+        'bad_token' => '정확하지 않은 토큰 정보 입니다.',
     ],
 ];
