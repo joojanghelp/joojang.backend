@@ -40,6 +40,16 @@ class User extends Authenticatable
 
 
     /**
+     * 업로드 책 리스트.
+     *
+     * @return void
+     */
+    public function upload_book()
+    {
+        return $this->hasMany('App\Model\Book\Books', 'user_id', 'id');
+    }
+
+    /**
      * 독서 활동.
      *
      * @return void
