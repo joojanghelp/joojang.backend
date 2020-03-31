@@ -16,8 +16,7 @@ class BaseController extends Controller
 	{
 		$response = [
 			'message' => (isset($params['message']) && $params['message']) ? $params['message'] : __('messages.default.success')
-		];
-
+        ];
 
 		if(isset($params['data']) && $params['data'])
 		{
