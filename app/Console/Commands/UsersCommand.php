@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 
 use App\Helpers\MasterHelper;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UsersCommand extends Command
 {
@@ -40,7 +41,13 @@ class UsersCommand extends Command
      */
     public function handle()
     {
-        $this->init();
+        // $this->init();
+
+        $i = 1;
+        do {
+          $this->init();
+          $i++; // 1씩 증가
+        } while ( $i < 60 );
 
         echo "\n";
     }
@@ -48,8 +55,8 @@ class UsersCommand extends Command
     public function init()
     {
         DB::table('users')->insert([
-            'name' => 'testid',
-            'email' => 'testid@gmail.com',
+            'name' => Str::random(7),
+            'email' => Str::random(7).'@gmail.com',
             'email_verified_at' => \Carbon\Carbon::now(),
             'password' => bcrypt('1212'),
             'uuid' => MasterHelper::GenerateUUID(),
