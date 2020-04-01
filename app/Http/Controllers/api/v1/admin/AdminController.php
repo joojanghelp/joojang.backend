@@ -92,4 +92,19 @@ class AdminController extends BaseController
 
         return BaseController::defaultSuccessCreateResponse();
     }
+
+    /**
+     * 책 있는지 여부.
+     *
+     * @param [type] $book_uuid
+     * @return void
+     */
+    public function book_exits($book_uuid)
+    {
+        $task = $this->admin->attemptBookExits($book_uuid);
+
+        return BaseController::defaultSuccessResponse([
+            'info' => $task['data']
+        ]);
+    }
 }

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Traits\UserTrait;
 use App\Traits\AdminTrait;
 use App\Traits\MasterTrait;
+use App\Traits\Model\BooksTrait;
 
 class AdminRepository implements AdminRepositoryInterface
 {
@@ -24,6 +25,7 @@ class AdminRepository implements AdminRepositoryInterface
         AdminTrait::getUserList as getUserListTrait;
         AdminTrait::makeUserInfoByUUID as makeUserInfoByUUIDTrait;
         AdminTrait::updateUserActiveByUserUUID as updateUserActiveByUserUUIDTrait;
+        AdminTrait::booksExits as booksExitsTrait;
         MasterTrait::paginateCollection as paginateCollectionTrait;
     }
 
@@ -179,5 +181,20 @@ class AdminRepository implements AdminRepositoryInterface
             'state' => true,
             'data' => []
         ];
+    }
+
+    /**
+     * 책 존재 여부.
+     *
+     * @param [type] $book_uuid
+     * @return void
+     */
+    public function attemptBookExits($book_uuid)
+    {
+        return [
+            'state' => true,
+            'data' => $this->booksExitsTrait($book_uuid)
+        ];
+
     }
 }

@@ -3,6 +3,7 @@ namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
 use App\User;
+use App\Model\Book\Books;
 use Carbon\Carbon;
 
 /**
@@ -112,5 +113,18 @@ trait AdminTrait
     public function updateUserActiveByUserUUID($user_uuid, $active)
     {
         return User::where('uuid', $user_uuid)->update(['active' => $active]);
+    }
+
+    /**
+     * 책 존재 여부.
+     *
+     * @param [type] $book_uuid
+     * @return void
+     */
+    public function booksExits($book_uuid)
+    {
+        return Books::where([
+            ['uuid', '=', $book_uuid],
+        ])->exists();
     }
 }

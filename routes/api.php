@@ -55,6 +55,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::get('users/{user_uuid}/info', 'AdminController@user_info')->name('user.info'); // 사용자 기본 정보.
             Route::post('users/{user_uuid}/info', 'AdminController@user_info_update')->name('user.info.update'); // 사용자 기본 정보 수정..
             Route::post('users/active', 'AdminController@user_active')->name('user.active.update'); // 사용자 기본 활성 컨트롤.
+            Route::get('book/{book_uuid}/exits', 'AdminController@book_exits')->name('book.exits'); // 사용자 책 존재 여부..
         });
 
 
