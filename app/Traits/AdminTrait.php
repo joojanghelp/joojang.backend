@@ -44,6 +44,7 @@ trait AdminTrait
                         'code_id' => $element['level']['code_id'],
                         'code_name' => $element['level']['code_name'],
                     ],
+                    'active' => $element['active'],
                     'activity_count' => $element['activity_count'],
                     'read_book_count' => $element['read_book_count'],
                     'created_at' => $element['created_at'],
@@ -99,5 +100,17 @@ trait AdminTrait
         } else {
             return false;
         }
+    }
+
+    /**
+     * uuid 로 사용자 active 업데이트
+     *
+     * @param [type] $user_uuid
+     * @param [type] $active
+     * @return void
+     */
+    public function updateUserActiveByUserUUID($user_uuid, $active)
+    {
+        return User::where('uuid', $user_uuid)->update(['active' => $active]);
     }
 }

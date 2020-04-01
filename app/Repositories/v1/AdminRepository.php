@@ -23,6 +23,7 @@ class AdminRepository implements AdminRepositoryInterface
         UserTrait::updateUsersByUserUUID as updateUsersByUserUUIDTrait;
         AdminTrait::getUserList as getUserListTrait;
         AdminTrait::makeUserInfoByUUID as makeUserInfoByUUIDTrait;
+        AdminTrait::updateUserActiveByUserUUID as updateUserActiveByUserUUIDTrait;
         MasterTrait::paginateCollection as paginateCollectionTrait;
     }
 
@@ -135,6 +136,48 @@ class AdminRepository implements AdminRepositoryInterface
         return [
             'state' => true,
             'data' => $task
+        ];
+    }
+
+    /**
+     * 사용자 활설 비활성.
+     *
+     * @param [type] $request
+     * @return void
+     */
+    public function attemptUserActiveControl($request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'user_uuid' => 'required',
+            'active' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $task_user_uuid = $request->input('user_uuid');
+        $task_active = $request->input('active');
+
+        $task = $this->checkUserUUIDExistsTrait($task_user_uuid);
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing_user')
+            ];
+        }
+
+        $task = $this->updateUserActiveByUserUUIDTrait($task_user_uuid, $task_active);
+        return [
+            'state' => true,
+            'data' => []
         ];
     }
 }

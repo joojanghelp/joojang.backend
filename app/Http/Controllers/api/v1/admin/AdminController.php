@@ -73,4 +73,23 @@ class AdminController extends BaseController
             return BaseController::defaultSuccessCreateResponse();
         }
     }
+
+    /**
+     * 사용자 활성 컨트롤.
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function user_active(Request $request)
+    {
+        $task = $this->admin->attemptUserActiveControl($request);
+
+        if($task['state'] == false) {
+            return BaseController::defaultErrorResponse([
+                'message' => $task['message']
+            ]);
+        }
+
+        return BaseController::defaultSuccessCreateResponse();
+    }
 }
