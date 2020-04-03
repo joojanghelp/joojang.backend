@@ -107,4 +107,89 @@ class AdminController extends BaseController
             'info' => $task['data']
         ]);
     }
+
+    /**
+     * 전체 책 리스트
+     *
+     * @param Request $request
+     * @param integer $page
+     * @return void
+     */
+    public function books_list(Request $request, int $page)
+    {
+        $task = $this->admin->attemptBooksList($request, $page);
+
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
+
+    /**
+     * 추천 도서 리스트
+     *
+     * @param Request $request
+     * @param integer $page
+     * @return void
+     */
+    public function recommend_books_list(Request $request, string $gubun, int $page)
+    {
+        $task = $this->admin->attemptRecommendBooksList($request, $gubun, $page);
+
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
+
+    public function recommend_books_delete(Request $request)
+    {
+        $task = $this->admin->attemptRecommendBooksDelete($request);
+
+        if($task['state'] == false) {
+            return BaseController::defaultErrorResponse([
+                'message' => $task['message']
+            ]);
+        }
+
+        return BaseController::defaultSuccessCreateResponse();
+    }
+
+    public function recommend_books_create(Request $request)
+    {
+        $task = $this->admin->attemptRecommendBooksCreate($request);
+
+        if($task['state'] == false) {
+            return BaseController::defaultErrorResponse([
+                'message' => $task['message']
+            ]);
+        }
+
+        return BaseController::defaultSuccessCreateResponse();
+    }
+
+    public function books_activity_list(Request $request, string $gubun, int $page)
+    {
+        $task = $this->admin->attemptBooksActivityList($request, $gubun, $page);
+
+        if($task['state'] == false) {
+            return BaseController::defaultListNothingResponse($task['message']);
+        } else {
+            return BaseController::defaultPageListSuccessResponse($task['data']);
+        }
+    }
+    public function books_activity_delete(Request $request)
+    {
+        $task = $this->admin->attemptBookActivityDelete($request);
+
+        if($task['state'] == false) {
+            return BaseController::defaultErrorResponse([
+                'message' => $task['message']
+            ]);
+        }
+
+        return BaseController::defaultSuccessCreateResponse();
+    }
 }

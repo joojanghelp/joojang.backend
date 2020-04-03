@@ -54,4 +54,9 @@ class UserBookActivity extends Model
     {
         return $this->hasOne('App\User', 'id', 'user_id');
     }
+
+    public function books()
+    {
+        return $this->hasOne(Books::class, 'id', 'book_id');
+    }
 }

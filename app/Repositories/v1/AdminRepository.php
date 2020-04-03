@@ -25,8 +25,15 @@ class AdminRepository implements AdminRepositoryInterface
         AdminTrait::getUserList as getUserListTrait;
         AdminTrait::makeUserInfoByUUID as makeUserInfoByUUIDTrait;
         AdminTrait::updateUserActiveByUserUUID as updateUserActiveByUserUUIDTrait;
+        AdminTrait::getBooksList as getBooksListTrait;
         AdminTrait::booksExits as booksExitsTrait;
+        AdminTrait::getRecommendBooksList as getRecommendBooksListTrait;
         MasterTrait::paginateCollection as paginateCollectionTrait;
+        AdminTrait::recommendBooksExitsByid as recommendBooksExitsByidTrait;
+        AdminTrait::deleteRecommendBook as deleteRecommendBookTrait;
+        AdminTrait::recommendBooksExitsByBookid as recommendBooksExitsByBookidTrait;
+        AdminTrait::createRecommendBook as createRecommendBookTrait;
+        AdminTrait::getBooksActivityList as getBooksActivityListTrait;
     }
 
     public function start()
@@ -195,6 +202,209 @@ class AdminRepository implements AdminRepositoryInterface
             'state' => true,
             'data' => $this->booksExitsTrait($book_uuid)
         ];
-
     }
+
+    public function attemptBooksList(Request $request, int $page)
+    {
+        $task = $this->getBooksListTrait();
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $taskResult = $this->paginateCollectionTrait($task, $this->pageRow, $page)->toArray();
+
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+    }
+
+    public function attemptRecommendBooksList(Request $request, string $gubun, int $page)
+    {
+        $task = $this->getRecommendBooksListTrait($gubun);
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $taskResult = $this->paginateCollectionTrait($task, $this->pageRow, $page)->toArray();
+
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+    }
+
+    public function attemptRecommendBooksDelete($request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'book_id' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $book_id = $request->input('book_id');
+
+        $exitsTask = $this->recommendBooksExitsByBookid($book_id);
+        if(!$exitsTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $deleteTask = $this->deleteRecommendBookTrait($book_id);
+
+        if(!$deleteTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+        return [
+            'state' => true
+        ];
+    }
+
+    public function attemptRecommendBooksCreate($request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'book_id' => 'required',
+            'gubun' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $book_id = $request->input('book_id');
+        $gubun = $request->input('gubun');
+        $user_id = Auth::id();
+
+        $exitsTask = $this->booksExitsByid($book_id);
+        if(!$exitsTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $exitsTask = $this->recommendBooksExitsByBookidTrait($book_id);
+        if($exitsTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.exits')
+            ];
+        }
+
+        $createTask = $this->createRecommendBookTrait($user_id, $gubun, $book_id);
+
+        if(!$createTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+        return [
+            'state' => true
+        ];
+    }
+
+    public function attemptBooksActivityList(Request $request, string $gubun, int $page)
+    {
+        $task = $this->getBooksActivityListTrait($gubun);
+
+        if(!$task) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $taskResult = $this->paginateCollectionTrait($task, $this->pageRow, $page)->toArray();
+
+        if($taskResult) {
+            $taskResult['items'] = $taskResult['data'];
+            unset($taskResult['data']);
+        }
+
+        return [
+            'state' => true,
+            'data' => $taskResult
+        ];
+    }
+
+    public function attemptBookActivityDelete($request)
+    {
+        $validator = FacadesValidator::make($request->all(), [
+            'activity_uuid' => 'required',
+        ]);
+
+        if( $validator->fails() ) {
+            $errorMessage = "";
+            foreach($validator->getMessageBag()->all() as $element):
+                $errorMessage .= $element."\n";
+            endforeach;
+			return [
+				'state' => false,
+				'message' => $errorMessage
+			];
+        }
+
+        $activity_uuid = $request->input('activity_uuid');
+
+        $exitsTask = $this->bookActivityExitsByuuid($activity_uuid);
+        if(!$exitsTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.error.nothing')
+            ];
+        }
+
+        $deleteTask = $this->deleteBookActivity($activity_uuid);
+
+        if(!$deleteTask) {
+            return [
+                'state' => false,
+                'message' => __('messages.default.error')
+            ];
+        }
+        return [
+            'state' => true
+        ];
+    }
+
 }
