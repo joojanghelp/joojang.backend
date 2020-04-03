@@ -23,7 +23,7 @@ class BaseController extends Controller
 			$response['data'] = $params['data'];
 		}
 
-		if(isset($params['info']) && $params['info'])
+		if(isset($params['info'])) // true / false 일떄를 대비해서..
 		{
 			$response['info'] = $params['info'];
 		}

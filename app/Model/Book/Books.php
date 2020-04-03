@@ -66,6 +66,16 @@ class Books extends BaseModel
     }
 
     /**
+     * 관계 추천 도서.
+     *
+     * @return void
+     */
+    public function recommend()
+    {
+        return $this->hasOne('App\Model\Book\RecommendBooks', 'book_id', 'id');
+    }
+
+    /**
      * 사용자 정보
      *
      * @return void

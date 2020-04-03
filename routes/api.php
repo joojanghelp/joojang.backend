@@ -54,6 +54,16 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
             Route::get('users/page/{page}', 'AdminController@user_list')->name('user.list'); // 사용자 리스트.
             Route::get('users/{user_uuid}/info', 'AdminController@user_info')->name('user.info'); // 사용자 기본 정보.
             Route::post('users/{user_uuid}/info', 'AdminController@user_info_update')->name('user.info.update'); // 사용자 기본 정보 수정..
+            Route::post('users/active', 'AdminController@user_active')->name('user.active.update'); // 사용자 기본 활성 컨트롤.
+            Route::get('book/{book_uuid}/exits', 'AdminController@book_exits')->name('book.exits'); // 사용자 책 존재 여부..
+            Route::get('books/page/{page}', 'AdminController@books_list')->name('books.list'); // 사용자 리스트.
+            Route::get('books/recommend/{gubun}/page/{page}', 'AdminController@recommend_books_list')->name('recommend_books.list'); // 사용자 리스트.
+
+            Route::post('books/recommend', 'AdminController@recommend_books_create')->name('recommend.books.create'); // 추천 도서 등록.
+            Route::delete('books/recommend', 'AdminController@recommend_books_delete')->name('recommend.books.delete'); // 추천 도서 삭제.
+
+            Route::get('books/activity/{gubun}/page/{page}', 'AdminController@books_activity_list')->name('books.activity.list'); // 독서 활동 리스트.
+            Route::delete('books/activity', 'AdminController@books_activity_delete')->name('books.activity.delete'); // 독서 활동 삭제.
         });
 
 
