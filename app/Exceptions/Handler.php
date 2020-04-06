@@ -64,11 +64,17 @@ class Handler extends ExceptionHandler
 			Log::channel('pdoexceptionlog')->error($logMessage);
         }
 
-        // 인증 에러.
+        // 인증 에러. ( 로그인이 필요한.)
         if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
             return response()->json([
                 'error_message' => __('auth.need_login'),
             ], 401);
+        }
+
+        // 인증 에러 ( 관리자 권한.)
+        if ($exception instanceof \App\Exceptions\AdminAuthException) // 기타 Exception
+	    {
+		    return $exception->render($request, $exception);
         }
 
         /**
