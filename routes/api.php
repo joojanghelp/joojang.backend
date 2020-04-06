@@ -50,7 +50,7 @@ Route::group(['namespace' => 'api', 'as' => 'api.'], function () {
 
 
 
-        Route::group(['middleware' => 'auth:api', 'namespace' => 'admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {            // 어드민 관련 API
+        Route::group(['middleware' => ['auth:api', 'admin'], 'namespace' => 'admin', 'prefix' => 'admin', 'as' => 'admin.'], function () {            // 어드민 관련 API
             Route::get('users/page/{page}', 'AdminController@user_list')->name('user.list'); // 사용자 리스트.
             Route::get('users/{user_uuid}/info', 'AdminController@user_info')->name('user.info'); // 사용자 기본 정보.
             Route::post('users/{user_uuid}/info', 'AdminController@user_info_update')->name('user.info.update'); // 사용자 기본 정보 수정..
